@@ -220,7 +220,7 @@ importBtn.addEventListener('click', async () => {
         url: bm.url.slice(0, 2000),
         description: (bm.folder || '').slice(0, 500),
         category: categorize(bm.folder),
-        pinned: false,
+        pinned: (bm.folder || '').includes('Bookmarks Bar'),
         created_at: timestamp,
       }]
 

@@ -189,7 +189,7 @@ foreach ($bm in $toImport) {
         url = $bm.url
         description = $bm.folder
         category = Get-Category -folder $bm.folder
-        pinned = $false
+        pinned = ($bm.folder -match "Bookmarks Bar")
         created_at = $timestamp
     }
 }
@@ -205,8 +205,9 @@ foreach ($item in $batch) {
     $desc = $item.description -replace '\\', '\\\\' -replace '"', '\"' -replace "`r", '' -replace "`n", ' '
     $cat = $item.category
 
+    $pinnedStr = if ($item.pinned) { "true" } else { "false" }
     $json = @"
-[{"id":"$($item.id)","title":"$title","url":"$url","description":"$desc","category":"$cat","pinned":false,"created_at":"$timestamp"}]
+[{"id":"$($item.id)","title":"$title","url":"$url","description":"$desc","category":"$cat","pinned":$pinnedStr,"created_at":"$timestamp"}]
 "@
 
     try {
