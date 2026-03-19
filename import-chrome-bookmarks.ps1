@@ -194,23 +194,44 @@ foreach ($bm in $toImport) {
     }
 }
 
-# Insert in batches of 50
-$batchSize = 50
-for ($i = 0; $i -lt $batch.Count; $i += $batchSize) {
-    $chunk = $batch[$i..([Math]::Min($i + $batchSize - 1, $batch.Count - 1))]
-    $json = $chunk | ConvertTo-Json -Depth 10
-    if ($chunk.Count -eq 1) { $json = "[$json]" }
+# Insert one at a time to handle failures gracefully
+$successCount = 0
+$failCount = 0
+
+foreach ($item in $batch) {
+    # Build JSON manually to avoid PowerShell serialization issues
+    $title = $item.title -replace '\\', '\\\\' -replace '"', '\"' -replace "`r", '' -replace "`n", ' '
+    $url = $item.url -replace '\\', '\\\\' -replace '"', '\"'
+    $desc = $item.description -replace '\\', '\\\\' -replace '"', '\"' -replace "`r", '' -replace "`n", ' '
+    $cat = $item.category
+
+    $json = @"
+[{"id":"$($item.id)","title":"$title","url":"$url","description":"$desc","category":"$cat","pinned":false,"created_at":"$timestamp"}]
+"@
 
     try {
-        Invoke-RestMethod -Uri "$SUPABASE_URL/rest/v1/bookmarks" -Headers $headers -Method Post -Body $json | Out-Null
-        $imported = [Math]::Min($i + $batchSize, $batch.Count)
-        Write-Host "  Imported $imported / $($batch.Count)..." -ForegroundColor Cyan
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($json)
+        Invoke-RestMethod -Uri "$SUPABASE_URL/rest/v1/bookmarks" -Headers $headers -Method Post -Body $bytes | Out-Null
+        $successCount++
+        if ($successCount % 25 -eq 0) {
+            Write-Host "  Imported $successCount / $($batch.Count)..." -ForegroundColor Cyan
+        }
     } catch {
-        Write-Host "  [ERROR] Batch failed: $($_.Exception.Message)" -ForegroundColor Red
+        $failCount++
+        $errorBody = ""
+        try { $errorBody = $_.ErrorDetails.Message } catch {}
+        if ($failCount -le 3) {
+            Write-Host "  [SKIP] '$($item.title)': $errorBody" -ForegroundColor Yellow
+        }
     }
 }
 
 Write-Host ""
-Write-Host "  Done! Imported $($batch.Count) bookmarks." -ForegroundColor Green
+if ($successCount -gt 0) {
+    Write-Host "  Done! Imported $successCount bookmarks." -ForegroundColor Green
+}
+if ($failCount -gt 0) {
+    Write-Host "  Skipped $failCount bookmarks (bad data or duplicates)." -ForegroundColor Yellow
+}
 Write-Host "  Refresh your Life Companion app to see them." -ForegroundColor White
 Write-Host ""
