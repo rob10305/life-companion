@@ -44,8 +44,8 @@ export default function TasksView() {
       <div className="flex-shrink-0 p-6 pb-0">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Life Tasks</h1>
-            <p className="text-sm text-slate-500 dark:text-gray-400 mt-0.5">
+            <h1 className="text-2xl font-bold text-notion-text dark:text-white">Life Tasks</h1>
+            <p className="text-sm text-notion-muted dark:text-gray-400 mt-0.5">
               {pendingCount} pending · {doneCount} completed
             </p>
           </div>
@@ -60,18 +60,18 @@ export default function TasksView() {
 
         {/* Search */}
         <div className="relative mb-4">
-          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500" />
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-notion-muted dark:text-gray-500" />
           <input
             type="text"
             placeholder="Search tasks..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:border-slate-300 dark:focus:border-gray-700"
+            className="w-full bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-xl pl-10 pr-4 py-2.5 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-cream-400 dark:focus:border-gray-700"
           />
         </div>
 
         {/* Filters */}
-        <div className="flex gap-2 flex-wrap pb-4 border-b border-slate-200 dark:border-gray-900">
+        <div className="flex gap-2 flex-wrap pb-4 border-b border-cream-300 dark:border-gray-900">
           {/* Status */}
           {[
             { value: 'active', label: 'Pending' },
@@ -84,14 +84,14 @@ export default function TasksView() {
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filterStatus === opt.value
                   ? 'bg-blue-600 text-white'
-                  : 'bg-white dark:bg-gray-900 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-gray-800'
+                  : 'bg-white dark:bg-gray-900 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white border border-cream-300 dark:border-gray-800'
               }`}
             >
               {opt.label}
             </button>
           ))}
 
-          <div className="w-px bg-slate-100 dark:bg-gray-800 mx-1" />
+          <div className="w-px bg-cream-200 dark:bg-gray-800 mx-1" />
 
           {/* Priority */}
           {[
@@ -105,8 +105,8 @@ export default function TasksView() {
               onClick={() => setFilterPriority(opt.value)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filterPriority === opt.value
-                  ? 'bg-slate-200 dark:bg-gray-700 text-slate-900 dark:text-white'
-                  : 'bg-white dark:bg-gray-900 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-gray-800'
+                  ? 'bg-cream-300 dark:bg-gray-700 text-notion-text dark:text-white'
+                  : 'bg-white dark:bg-gray-900 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white border border-cream-300 dark:border-gray-800'
               }`}
             >
               {opt.label}
@@ -119,7 +119,7 @@ export default function TasksView() {
           <button
             onClick={() => setFilterCat('all')}
             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              filterCat === 'all' ? 'bg-slate-200 dark:bg-gray-700 text-slate-900 dark:text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white'
+              filterCat === 'all' ? 'bg-cream-300 dark:bg-gray-700 text-notion-text dark:text-white' : 'text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white'
             }`}
           >
             All
@@ -131,7 +131,7 @@ export default function TasksView() {
                 key={cat.id}
                 onClick={() => setFilterCat(cat.id)}
                 className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                  filterCat === cat.id ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white'
+                  filterCat === cat.id ? 'text-notion-text dark:text-white' : 'text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white'
                 }`}
                 style={filterCat === cat.id ? { background: cat.color + '30', color: cat.color } : {}}
               >
@@ -154,7 +154,7 @@ export default function TasksView() {
       {/* Task list */}
       <div className="flex-1 overflow-y-auto p-6 pt-3">
         {filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-40 text-slate-400 dark:text-gray-600">
+          <div className="flex flex-col items-center justify-center h-40 text-notion-muted dark:text-gray-600">
             <CheckSquare size={32} className="mb-3 opacity-40" />
             <p className="text-sm">
               {search ? 'No tasks match your search' : 'Nothing here — great job!'}

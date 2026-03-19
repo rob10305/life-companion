@@ -48,11 +48,11 @@ export default function TaskModal({ task, onClose, defaultProjectId }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl w-full max-w-md shadow-2xl">
+      <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-700 rounded-2xl w-full max-w-md shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-gray-800">
+        <div className="flex items-center justify-between p-5 border-b border-cream-300 dark:border-gray-800">
           <h2 className="text-lg font-semibold">{isEdit ? 'Edit Task' : 'New Task'}</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white">
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white">
             <X size={18} />
           </button>
         </div>
@@ -66,18 +66,18 @@ export default function TaskModal({ task, onClose, defaultProjectId }) {
               placeholder="What needs to be done?"
               value={form.title}
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-              className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-4 py-3 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
 
           {/* Category & Priority */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Category</label>
+              <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Category</label>
               <select
                 value={form.category}
                 onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-                className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-500"
+                className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-3 py-2.5 text-notion-text dark:text-white text-sm focus:outline-none focus:border-blue-500"
               >
                 {categories.map(c => (
                   <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>
@@ -85,11 +85,11 @@ export default function TaskModal({ task, onClose, defaultProjectId }) {
               </select>
             </div>
             <div>
-              <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Priority</label>
+              <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Priority</label>
               <select
                 value={form.priority}
                 onChange={e => setForm(f => ({ ...f, priority: e.target.value }))}
-                className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-500"
+                className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-3 py-2.5 text-notion-text dark:text-white text-sm focus:outline-none focus:border-blue-500"
               >
                 {Object.entries(PRIORITY_CONFIG).map(([key, val]) => (
                   <option key={key} value={key}>{val.label}</option>
@@ -101,20 +101,20 @@ export default function TaskModal({ task, onClose, defaultProjectId }) {
           {/* Due date & Project */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Due date</label>
+              <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Due date</label>
               <input
                 type="date"
                 value={form.dueDate}
                 onChange={e => setForm(f => ({ ...f, dueDate: e.target.value }))}
-                className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 dark:[color-scheme:dark]"
+                className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-3 py-2.5 text-notion-text dark:text-white text-sm focus:outline-none focus:border-blue-500 dark:[color-scheme:dark]"
               />
             </div>
             <div>
-              <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Project (optional)</label>
+              <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Project (optional)</label>
               <select
                 value={form.projectId}
                 onChange={e => setForm(f => ({ ...f, projectId: e.target.value }))}
-                className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-500"
+                className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-3 py-2.5 text-notion-text dark:text-white text-sm focus:outline-none focus:border-blue-500"
               >
                 <option value="">None</option>
                 {projects.map(p => (
@@ -129,7 +129,7 @@ export default function TaskModal({ task, onClose, defaultProjectId }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl border border-slate-300 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-gray-600 transition-colors text-sm font-medium"
+              className="flex-1 py-2.5 rounded-xl border border-cream-400 dark:border-gray-700 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white hover:border-cream-400 dark:hover:border-gray-600 transition-colors text-sm font-medium"
             >
               Cancel
             </button>

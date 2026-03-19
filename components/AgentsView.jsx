@@ -107,23 +107,23 @@ function AgentCard({ agent }) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-semibold text-slate-900 dark:text-white">{agent.name}</h3>
+              <h3 className="font-semibold text-notion-text dark:text-white">{agent.name}</h3>
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusInfo.bg} ${statusInfo.color} ${statusInfo.border} border`}>
                 {statusInfo.label}
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-gray-400 mt-1 leading-relaxed">{agent.description}</p>
+            <p className="text-xs text-notion-muted dark:text-gray-400 mt-1 leading-relaxed">{agent.description}</p>
           </div>
         </div>
 
         {/* Schedule */}
         <div className="flex items-center gap-4 mt-4 flex-wrap">
-          <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-gray-500">
+          <div className="flex items-center gap-1.5 text-xs text-notion-muted dark:text-gray-500">
             <Clock size={12} />
             <span>{agent.schedule}</span>
           </div>
           {agent.lastRun && (
-            <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-gray-500">
+            <div className="flex items-center gap-1.5 text-xs text-notion-muted dark:text-gray-500">
               <CheckCircle2 size={12} className="text-green-500" />
               <span>Last run: {agent.lastRun}</span>
             </div>
@@ -135,7 +135,7 @@ function AgentCard({ agent }) {
           {agent.status === 'coming_soon' ? (
             <button
               disabled
-              className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 text-slate-400 dark:text-gray-500 rounded-xl text-xs font-medium cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 text-notion-muted dark:text-gray-500 rounded-xl text-xs font-medium cursor-not-allowed"
             >
               <Zap size={13} /> Coming Soon
             </button>
@@ -150,7 +150,7 @@ function AgentCard({ agent }) {
           )}
           <button
             onClick={() => setExpanded(v => !v)}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 text-slate-600 dark:text-gray-300 rounded-xl text-xs font-medium hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 text-notion-text/80 dark:text-gray-300 rounded-xl text-xs font-medium hover:bg-cream-300 dark:hover:bg-gray-700 transition-colors"
           >
             <Settings size={13} /> {expanded ? 'Hide Details' : 'Details'}
           </button>
@@ -161,10 +161,10 @@ function AgentCard({ agent }) {
           <div className="mt-4 space-y-4">
             {/* Capabilities */}
             <div>
-              <h4 className="text-xs font-semibold text-slate-600 dark:text-gray-300 mb-2">Capabilities</h4>
+              <h4 className="text-xs font-semibold text-notion-text/80 dark:text-gray-300 mb-2">Capabilities</h4>
               <ul className="space-y-1.5">
                 {agent.capabilities.map((cap, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-slate-500 dark:text-gray-400">
+                  <li key={i} className="flex items-start gap-2 text-xs text-notion-muted dark:text-gray-400">
                     <CheckCircle2 size={12} className="flex-shrink-0 mt-0.5" style={{ color: agent.color }} />
                     {cap}
                   </li>
@@ -175,12 +175,12 @@ function AgentCard({ agent }) {
             {/* Config preview */}
             {agent.config && (
               <div>
-                <h4 className="text-xs font-semibold text-slate-600 dark:text-gray-300 mb-2">Configuration</h4>
-                <div className="bg-slate-100 dark:bg-gray-800 rounded-xl p-3 space-y-2">
+                <h4 className="text-xs font-semibold text-notion-text/80 dark:text-gray-300 mb-2">Configuration</h4>
+                <div className="bg-cream-200 dark:bg-gray-800 rounded-xl p-3 space-y-2">
                   {Object.entries(agent.config).map(([key, value]) => (
                     <div key={key} className="flex items-start gap-2 text-xs">
-                      <span className="text-slate-400 dark:text-gray-500 min-w-[80px] capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                      <span className="text-slate-600 dark:text-gray-300">
+                      <span className="text-notion-muted dark:text-gray-500 min-w-[80px] capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
+                      <span className="text-notion-text/80 dark:text-gray-300">
                         {Array.isArray(value)
                           ? value.length > 0 ? value.join(', ') : 'Not configured yet'
                           : value || 'Not set'}
@@ -219,14 +219,14 @@ export default function AgentsView() {
       <div className="flex-shrink-0 p-6 pb-4">
         <div className="flex items-center justify-between mb-2">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Agents</h1>
-            <p className="text-sm text-slate-500 dark:text-gray-400 mt-0.5">
+            <h1 className="text-2xl font-bold text-notion-text dark:text-white">Agents</h1>
+            <p className="text-sm text-notion-muted dark:text-gray-400 mt-0.5">
               {runningCount} running · {totalCount} total
             </p>
           </div>
           <button
             disabled
-            className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 text-slate-400 dark:text-gray-500 rounded-xl font-medium text-sm cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2.5 bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 text-notion-muted dark:text-gray-500 rounded-xl font-medium text-sm cursor-not-allowed"
             title="Coming soon"
           >
             <Plus size={16} />
@@ -235,12 +235,12 @@ export default function AgentsView() {
         </div>
 
         {/* Info banner */}
-        <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-xl p-4 mt-4">
+        <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-xl p-4 mt-4">
           <div className="flex items-start gap-3">
             <Bot size={18} className="text-blue-400 flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-1">Your AI Agents</h3>
-              <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
+              <h3 className="text-sm font-medium text-notion-text dark:text-white mb-1">Your AI Agents</h3>
+              <p className="text-xs text-notion-muted dark:text-gray-400 leading-relaxed">
                 Agents are automated assistants that run on a schedule to keep you informed.
                 Each one monitors specific sources and surfaces what matters to you.
                 Click "Details" on any agent to see its capabilities and configuration.
@@ -260,11 +260,11 @@ export default function AgentsView() {
           {/* Add agent placeholder */}
           <button
             disabled
-            className="border-2 border-dashed border-slate-300 dark:border-gray-800 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 text-slate-400 dark:text-gray-600 min-h-[200px] cursor-not-allowed"
+            className="border-2 border-dashed border-cream-400 dark:border-gray-800 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 text-notion-muted dark:text-gray-600 min-h-[200px] cursor-not-allowed"
           >
             <Bot size={28} className="opacity-40" />
             <span className="text-sm font-medium">Add Custom Agent</span>
-            <span className="text-xs text-slate-300 dark:text-gray-700">Build your own automation</span>
+            <span className="text-xs text-cream-400 dark:text-gray-700">Build your own automation</span>
           </button>
         </div>
       </div>

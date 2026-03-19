@@ -9,7 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className="dark:bg-gray-950 bg-slate-50 dark:text-white text-slate-900 antialiased">{children}</body>
+      <body className="dark:bg-gray-950 bg-cream-50 dark:text-white text-notion-text antialiased">{children}</body>
     </html>
   )
 }

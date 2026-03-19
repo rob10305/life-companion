@@ -29,9 +29,9 @@ function BookmarksBar({ bookmarks, onTogglePin }) {
   }
 
   return (
-    <div className="flex-shrink-0 border-b border-slate-200 dark:border-gray-800 bg-slate-100/50 dark:bg-gray-900/50" onClick={() => setContextMenu(null)}>
+    <div className="flex-shrink-0 border-b border-cream-300 dark:border-gray-800 bg-cream-200/50 dark:bg-gray-900/50" onClick={() => setContextMenu(null)}>
       <div className="flex items-center gap-1 px-4 py-2 overflow-x-auto">
-        <Bookmark size={13} className="text-slate-400 dark:text-gray-600 flex-shrink-0 mr-1" />
+        <Bookmark size={13} className="text-notion-muted dark:text-gray-600 flex-shrink-0 mr-1" />
         {pinned.map(bm => {
           let favicon = null
           try { favicon = `https://www.google.com/s2/favicons?sz=16&domain=${new URL(bm.url).hostname}` } catch {}
@@ -42,7 +42,7 @@ function BookmarksBar({ bookmarks, onTogglePin }) {
               target="_blank"
               rel="noopener noreferrer"
               onContextMenu={(e) => handleContextMenu(e, bm)}
-              className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-gray-800 transition-all flex-shrink-0 max-w-[160px]"
+              className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-notion-text/80 dark:text-gray-300 hover:text-notion-text dark:hover:text-white hover:bg-cream-200 dark:hover:bg-gray-800 transition-all flex-shrink-0 max-w-[160px]"
             >
               {favicon && <img src={favicon} alt="" className="w-4 h-4 flex-shrink-0" />}
               <span className="truncate">{bm.title}</span>
@@ -56,16 +56,16 @@ function BookmarksBar({ bookmarks, onTogglePin }) {
         <>
           <div className="fixed inset-0 z-50" onClick={() => setContextMenu(null)} onContextMenu={e => { e.preventDefault(); setContextMenu(null) }} />
           <div
-            className="fixed z-50 bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl shadow-2xl py-1 min-w-[160px]"
+            className="fixed z-50 bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl shadow-2xl py-1 min-w-[160px]"
             style={{ left: contextMenu.x, top: contextMenu.y }}
           >
-            <div className="px-3 py-1.5 text-xs text-slate-400 dark:text-gray-500 truncate max-w-[200px]">
+            <div className="px-3 py-1.5 text-xs text-notion-muted dark:text-gray-500 truncate max-w-[200px]">
               {contextMenu.bookmark.title}
             </div>
-            <div className="h-px bg-slate-200 dark:bg-gray-700 my-1" />
+            <div className="h-px bg-cream-300 dark:bg-gray-700 my-1" />
             <button
               onClick={handleUnpin}
-              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700 hover:text-slate-900 dark:hover:text-white transition-colors text-left"
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-notion-text/80 dark:text-gray-300 hover:bg-cream-300 dark:hover:bg-gray-700 hover:text-notion-text dark:hover:text-white transition-colors text-left"
             >
               <PinOff size={13} /> Unpin from bar
             </button>
@@ -74,7 +74,7 @@ function BookmarksBar({ bookmarks, onTogglePin }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setContextMenu(null)}
-              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700 hover:text-slate-900 dark:hover:text-white transition-colors text-left"
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-notion-text/80 dark:text-gray-300 hover:bg-cream-300 dark:hover:bg-gray-700 hover:text-notion-text dark:hover:text-white transition-colors text-left"
             >
               <ExternalLink size={13} /> Open in new tab
             </a>
@@ -99,8 +99,8 @@ function ExtensionCard() {
           <Puzzle size={20} className="text-white" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Chrome Extension</h3>
-          <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">Auto-import bookmarks from any machine</p>
+          <h3 className="text-sm font-semibold text-notion-text dark:text-white">Chrome Extension</h3>
+          <p className="text-xs text-notion-muted dark:text-gray-400 mt-0.5">Auto-import bookmarks from any machine</p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <a
@@ -112,7 +112,7 @@ function ExtensionCard() {
           </a>
           <button
             onClick={() => setExpanded(v => !v)}
-            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white transition-colors"
           >
             {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           </button>
@@ -121,31 +121,31 @@ function ExtensionCard() {
 
       {expanded && (
         <div className="px-4 pb-4 pt-0">
-          <div className="bg-slate-100 dark:bg-gray-900/60 rounded-xl p-4 space-y-3">
-            <h4 className="text-xs font-semibold text-slate-600 dark:text-gray-300">Install Instructions</h4>
-            <ol className="space-y-2 text-xs text-slate-500 dark:text-gray-400 leading-relaxed">
+          <div className="bg-cream-200 dark:bg-gray-900/60 rounded-xl p-4 space-y-3">
+            <h4 className="text-xs font-semibold text-notion-text/80 dark:text-gray-300">Install Instructions</h4>
+            <ol className="space-y-2 text-xs text-notion-muted dark:text-gray-400 leading-relaxed">
               <li className="flex gap-2">
                 <span className="text-blue-400 font-bold flex-shrink-0">1.</span>
-                <span>Download the zip above and <strong className="text-slate-600 dark:text-gray-300">extract</strong> it to a folder</span>
+                <span>Download the zip above and <strong className="text-notion-text/80 dark:text-gray-300">extract</strong> it to a folder</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-blue-400 font-bold flex-shrink-0">2.</span>
-                <span>Go to <code className="bg-slate-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-blue-300">chrome://extensions</code> in Chrome</span>
+                <span>Go to <code className="bg-cream-300 dark:bg-gray-800 px-1.5 py-0.5 rounded text-blue-300">chrome://extensions</code> in Chrome</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-blue-400 font-bold flex-shrink-0">3.</span>
-                <span>Toggle <strong className="text-slate-600 dark:text-gray-300">Developer mode</strong> ON (top right)</span>
+                <span>Toggle <strong className="text-notion-text/80 dark:text-gray-300">Developer mode</strong> ON (top right)</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-blue-400 font-bold flex-shrink-0">4.</span>
-                <span>Click <strong className="text-slate-600 dark:text-gray-300">Load unpacked</strong> → select the extracted folder</span>
+                <span>Click <strong className="text-notion-text/80 dark:text-gray-300">Load unpacked</strong> → select the extracted folder</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-blue-400 font-bold flex-shrink-0">5.</span>
-                <span>Click the <strong className="text-slate-600 dark:text-gray-300">LC</strong> icon in toolbar → enter your Supabase URL and key → Import!</span>
+                <span>Click the <strong className="text-notion-text/80 dark:text-gray-300">LC</strong> icon in toolbar → enter your Supabase URL and key → Import!</span>
               </li>
             </ol>
-            <p className="text-xs text-slate-400 dark:text-gray-500 pt-1 border-t border-slate-200 dark:border-gray-800">
+            <p className="text-xs text-notion-muted dark:text-gray-500 pt-1 border-t border-cream-300 dark:border-gray-800">
               Works on any PC with Chrome. Install once per machine — bookmarks sync to your dashboard automatically.
             </p>
           </div>
@@ -279,13 +279,13 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl w-full max-w-lg shadow-2xl my-4">
-        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-gray-800">
+      <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-700 rounded-2xl w-full max-w-lg shadow-2xl my-4">
+        <div className="flex items-center justify-between p-5 border-b border-cream-300 dark:border-gray-800">
           <div className="flex items-center gap-3">
             <Chrome size={18} className="text-blue-400" />
             <h2 className="text-lg font-semibold">Import from Chrome</h2>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white">
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white">
             <X size={18} />
           </button>
         </div>
@@ -298,13 +298,13 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
               <div className="flex items-start gap-3">
                 <Download size={20} className="text-blue-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-1">Auto-import (recommended)</h3>
-                  <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed mb-2">
-                    Run <code className="bg-slate-200 dark:bg-gray-800 px-1.5 py-0.5 rounded text-blue-300">import-chrome-bookmarks.bat</code> from
+                  <h3 className="text-sm font-medium text-notion-text dark:text-white mb-1">Auto-import (recommended)</h3>
+                  <p className="text-xs text-notion-muted dark:text-gray-400 leading-relaxed mb-2">
+                    Run <code className="bg-cream-300 dark:bg-gray-800 px-1.5 py-0.5 rounded text-blue-300">import-chrome-bookmarks.bat</code> from
                     the project folder on your PC. It reads Chrome bookmarks and pushes them straight to Supabase.
                   </p>
-                  <p className="text-xs text-slate-400 dark:text-gray-500">
-                    Requires a <code className="bg-slate-200 dark:bg-gray-800 px-1 rounded">.env.local</code> file with your Supabase credentials.
+                  <p className="text-xs text-notion-muted dark:text-gray-500">
+                    Requires a <code className="bg-cream-300 dark:bg-gray-800 px-1 rounded">.env.local</code> file with your Supabase credentials.
                   </p>
                 </div>
               </div>
@@ -312,22 +312,22 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
 
             {/* Divider */}
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-px bg-slate-200 dark:bg-gray-800" />
-              <span className="text-xs text-slate-400 dark:text-gray-600">or upload manually</span>
-              <div className="flex-1 h-px bg-slate-200 dark:bg-gray-800" />
+              <div className="flex-1 h-px bg-cream-300 dark:bg-gray-800" />
+              <span className="text-xs text-notion-muted dark:text-gray-600">or upload manually</span>
+              <div className="flex-1 h-px bg-cream-300 dark:bg-gray-800" />
             </div>
 
             {/* Option 2: Upload exported file */}
-            <div className="bg-slate-100 dark:bg-gray-800 rounded-xl p-5 text-center">
-              <Upload size={24} className="mx-auto text-slate-500 dark:text-gray-400 mb-3" />
-              <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-1">Upload bookmarks file</h3>
-              <p className="text-xs text-slate-500 dark:text-gray-400 mb-2 max-w-sm mx-auto leading-relaxed">
-                In Chrome: <span className="text-slate-600 dark:text-gray-300">chrome://bookmarks</span> → three dots → Export bookmarks.
+            <div className="bg-cream-200 dark:bg-gray-800 rounded-xl p-5 text-center">
+              <Upload size={24} className="mx-auto text-notion-muted dark:text-gray-400 mb-3" />
+              <h3 className="text-sm font-medium text-notion-text dark:text-white mb-1">Upload bookmarks file</h3>
+              <p className="text-xs text-notion-muted dark:text-gray-400 mb-2 max-w-sm mx-auto leading-relaxed">
+                In Chrome: <span className="text-notion-text/80 dark:text-gray-300">chrome://bookmarks</span> → three dots → Export bookmarks.
               </p>
-              <p className="text-xs text-slate-400 dark:text-gray-500 mb-4">
-                Default export location: <code className="bg-slate-200 dark:bg-gray-700 px-1.5 py-0.5 rounded text-slate-600 dark:text-gray-300 text-[10px]">Downloads\bookmarks_*.html</code>
+              <p className="text-xs text-notion-muted dark:text-gray-500 mb-4">
+                Default export location: <code className="bg-cream-300 dark:bg-gray-700 px-1.5 py-0.5 rounded text-notion-text/80 dark:text-gray-300 text-[10px]">Downloads\bookmarks_*.html</code>
               </p>
-              <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-200 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-900 dark:text-white rounded-xl text-sm font-medium transition-colors cursor-pointer">
+              <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-cream-300 dark:bg-gray-700 hover:bg-cream-300 dark:hover:bg-gray-600 text-notion-text dark:text-white rounded-xl text-sm font-medium transition-colors cursor-pointer">
                 <Upload size={15} /> Choose File
                 <input type="file" accept=".html,.htm" onChange={handleFileUpload} className="hidden" />
               </label>
@@ -337,7 +337,7 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
 
         {/* Loading */}
         {phase === 'loading' && (
-          <div className="flex flex-col items-center justify-center py-12 text-slate-500 dark:text-gray-400">
+          <div className="flex flex-col items-center justify-center py-12 text-notion-muted dark:text-gray-400">
             <Loader2 size={28} className="animate-spin text-blue-400 mb-3" />
             <p className="text-sm">Reading Chrome bookmarks...</p>
           </div>
@@ -351,7 +351,7 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
               <p className="text-sm text-red-300 mb-3">{error}</p>
               <button
                 onClick={fetchChromeBookmarks}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-900 dark:text-white rounded-xl text-sm transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 text-notion-text dark:text-white rounded-xl text-sm transition-colors"
               >
                 Try again
               </button>
@@ -365,8 +365,8 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
             {chromeBookmarks.length === 0 ? (
               <div className="text-center py-8">
                 <CheckCircle2 size={28} className="mx-auto text-green-400 mb-3" />
-                <p className="text-sm text-slate-900 dark:text-white font-medium">All caught up!</p>
-                <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
+                <p className="text-sm text-notion-text dark:text-white font-medium">All caught up!</p>
+                <p className="text-xs text-notion-muted dark:text-gray-400 mt-1">
                   No new bookmarks found in Chrome (or they're all already imported).
                 </p>
               </div>
@@ -374,11 +374,11 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
               <>
                 {/* Category selector */}
                 <div>
-                  <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Import into category</label>
+                  <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Import into category</label>
                   <select
                     value={defaultCategory}
                     onChange={e => setDefaultCategory(e.target.value)}
-                    className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-500"
+                    className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-3 py-2.5 text-notion-text dark:text-white text-sm focus:outline-none focus:border-blue-500"
                   >
                     {bookmarkCategories.map(c => (
                       <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>
@@ -394,7 +394,7 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
                   >
                     {selected.size === chromeBookmarks.length ? 'Deselect all' : 'Select all'}
                   </button>
-                  <span className="text-xs text-slate-400 dark:text-gray-500">
+                  <span className="text-xs text-notion-muted dark:text-gray-500">
                     {selected.size} of {chromeBookmarks.length} selected
                   </span>
                 </div>
@@ -411,11 +411,11 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
                         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
                           selected.has(idx)
                             ? 'bg-blue-600/10 border border-blue-600/30'
-                            : 'border border-transparent hover:bg-slate-100 dark:hover:bg-gray-800'
+                            : 'border border-transparent hover:bg-cream-200 dark:hover:bg-gray-800'
                         }`}
                       >
                         <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                          selected.has(idx) ? 'bg-blue-600 border-blue-600' : 'border-slate-300 dark:border-gray-600'
+                          selected.has(idx) ? 'bg-blue-600 border-blue-600' : 'border-cream-400 dark:border-gray-600'
                         }`}>
                           {selected.has(idx) && (
                             <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
@@ -425,8 +425,8 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
                         </div>
                         {favicon && <img src={favicon} alt="" className="w-4 h-4 flex-shrink-0" />}
                         <div className="flex-1 min-w-0">
-                          <div className="text-sm text-slate-900 dark:text-white truncate">{bm.title}</div>
-                          <div className="text-xs text-slate-400 dark:text-gray-500 truncate">{bm.folder}</div>
+                          <div className="text-sm text-notion-text dark:text-white truncate">{bm.title}</div>
+                          <div className="text-xs text-notion-muted dark:text-gray-500 truncate">{bm.folder}</div>
                         </div>
                       </button>
                     )
@@ -473,51 +473,51 @@ function LinkModal({ bookmark, categories, onSave, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl w-full max-w-md shadow-2xl">
-        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-gray-800">
+      <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-700 rounded-2xl w-full max-w-md shadow-2xl">
+        <div className="flex items-center justify-between p-5 border-b border-cream-300 dark:border-gray-800">
           <h2 className="text-lg font-semibold">{isEdit ? 'Edit Link' : 'Add Link'}</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white">
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white">
             <X size={18} />
           </button>
         </div>
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
-            <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Title</label>
+            <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Title</label>
             <input
               autoFocus
               type="text"
               placeholder="e.g. Hacker News"
               value={form.title}
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-              className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-4 py-3 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">URL</label>
+            <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">URL</label>
             <input
               type="text"
               placeholder="https://..."
               value={form.url}
               onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
-              className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-4 py-3 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Description (optional)</label>
+            <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Description (optional)</label>
             <input
               type="text"
               placeholder="A short note about this link"
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-4 py-3 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Category</label>
+            <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Category</label>
             <select
               value={form.category}
               onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-              className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-500"
+              className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-3 py-2.5 text-notion-text dark:text-white text-sm focus:outline-none focus:border-blue-500"
             >
               {categories.map(c => (
                 <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>
@@ -528,7 +528,7 @@ function LinkModal({ bookmark, categories, onSave, onClose }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl border border-slate-300 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-gray-600 transition-colors text-sm font-medium"
+              className="flex-1 py-2.5 rounded-xl border border-cream-400 dark:border-gray-700 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white hover:border-cream-400 dark:hover:border-gray-600 transition-colors text-sm font-medium"
             >
               Cancel
             </button>
@@ -562,27 +562,27 @@ function CategoryModal({ categories, onSave, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl w-full max-w-sm shadow-2xl">
-        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-gray-800">
+      <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-700 rounded-2xl w-full max-w-sm shadow-2xl">
+        <div className="flex items-center justify-between p-5 border-b border-cream-300 dark:border-gray-800">
           <h2 className="text-lg font-semibold">New Category</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white">
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white">
             <X size={18} />
           </button>
         </div>
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
-            <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Name</label>
+            <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Name</label>
             <input
               autoFocus
               type="text"
               placeholder="e.g. Gaming Stuff"
               value={form.label}
               onChange={e => setForm(f => ({ ...f, label: e.target.value }))}
-              className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
+              className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-4 py-3 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-500 dark:text-gray-400 mb-2">Icon</label>
+            <label className="block text-xs text-notion-muted dark:text-gray-400 mb-2">Icon</label>
             <div className="flex gap-1.5 flex-wrap">
               {EMOJIS.map(e => (
                 <button
@@ -590,7 +590,7 @@ function CategoryModal({ categories, onSave, onClose }) {
                   type="button"
                   onClick={() => setForm(f => ({ ...f, emoji: e }))}
                   className={`w-9 h-9 text-lg flex items-center justify-center rounded-lg transition-all ${
-                    form.emoji === e ? 'bg-slate-200 dark:bg-gray-600 ring-2 ring-blue-500' : 'bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700'
+                    form.emoji === e ? 'bg-cream-300 dark:bg-gray-600 ring-2 ring-blue-500' : 'bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700'
                   }`}
                 >
                   {e}
@@ -599,14 +599,14 @@ function CategoryModal({ categories, onSave, onClose }) {
             </div>
           </div>
           <div>
-            <label className="block text-xs text-slate-500 dark:text-gray-400 mb-2">Color</label>
+            <label className="block text-xs text-notion-muted dark:text-gray-400 mb-2">Color</label>
             <div className="flex gap-2 flex-wrap">
               {COLORS.map(c => (
                 <button
                   key={c}
                   type="button"
                   onClick={() => setForm(f => ({ ...f, color: c }))}
-                  className={`w-7 h-7 rounded-full transition-all ${form.color === c ? 'ring-2 ring-white ring-offset-2 ring-offset-white dark:ring-offset-gray-900 scale-110' : 'hover:scale-110'}`}
+                  className={`w-7 h-7 rounded-full transition-all ${form.color === c ? 'ring-2 ring-white ring-offset-2 ring-offset-cream-50 dark:ring-offset-gray-900 scale-110' : 'hover:scale-110'}`}
                   style={{ backgroundColor: c }}
                 />
               ))}
@@ -616,7 +616,7 @@ function CategoryModal({ categories, onSave, onClose }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl border border-slate-300 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-gray-600 transition-colors text-sm font-medium"
+              className="flex-1 py-2.5 rounded-xl border border-cream-400 dark:border-gray-700 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white hover:border-cream-400 dark:hover:border-gray-600 transition-colors text-sm font-medium"
             >
               Cancel
             </button>
@@ -643,7 +643,7 @@ function LinkCard({ bookmark, category, onEdit, onDelete, onTogglePin }) {
   } catch {}
 
   return (
-    <div className="group flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-slate-300 dark:hover:border-gray-700 transition-all">
+    <div className="group flex items-center gap-3 px-4 py-3 rounded-xl border border-cream-300 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-cream-400 dark:hover:border-gray-700 transition-all">
       {/* Favicon */}
       <div
         className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
@@ -661,12 +661,12 @@ function LinkCard({ bookmark, category, onEdit, onDelete, onTogglePin }) {
           href={bookmark.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm font-medium text-slate-900 dark:text-white hover:text-blue-300 transition-colors truncate block"
+          className="text-sm font-medium text-notion-text dark:text-white hover:text-blue-300 transition-colors truncate block"
         >
           {bookmark.title}
         </a>
         {bookmark.description && (
-          <p className="text-xs text-slate-400 dark:text-gray-500 truncate mt-0.5">{bookmark.description}</p>
+          <p className="text-xs text-notion-muted dark:text-gray-500 truncate mt-0.5">{bookmark.description}</p>
         )}
       </div>
 
@@ -677,7 +677,7 @@ function LinkCard({ bookmark, category, onEdit, onDelete, onTogglePin }) {
           className={`p-1.5 rounded-lg transition-colors ${
             bookmark.pinned
               ? 'text-yellow-400 hover:bg-yellow-500/20'
-              : 'text-slate-400 dark:text-gray-500 hover:bg-slate-200 dark:hover:bg-gray-700 hover:text-yellow-400'
+              : 'text-notion-muted dark:text-gray-500 hover:bg-cream-300 dark:hover:bg-gray-700 hover:text-yellow-400'
           }`}
           title={bookmark.pinned ? 'Unpin from bar' : 'Pin to bookmarks bar'}
         >
@@ -687,19 +687,19 @@ function LinkCard({ bookmark, category, onEdit, onDelete, onTogglePin }) {
           href={bookmark.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-400 dark:text-gray-500 hover:text-blue-400 transition-colors"
+          className="p-1.5 rounded-lg hover:bg-cream-300 dark:hover:bg-gray-700 text-notion-muted dark:text-gray-500 hover:text-blue-400 transition-colors"
         >
           <ExternalLink size={13} />
         </a>
         <button
           onClick={() => onEdit(bookmark)}
-          className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-400 dark:text-gray-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="p-1.5 rounded-lg hover:bg-cream-300 dark:hover:bg-gray-700 text-notion-muted dark:text-gray-500 hover:text-notion-text dark:hover:text-white transition-colors"
         >
           <Pencil size={13} />
         </button>
         <button
           onClick={() => onDelete(bookmark.id)}
-          className="p-1.5 rounded-lg hover:bg-red-500/20 text-slate-400 dark:text-gray-500 hover:text-red-400 transition-colors"
+          className="p-1.5 rounded-lg hover:bg-red-500/20 text-notion-muted dark:text-gray-500 hover:text-red-400 transition-colors"
         >
           <Trash2 size={13} />
         </button>
@@ -793,22 +793,22 @@ export default function LinksView() {
       <div className="flex-shrink-0 p-6 pb-0">
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Links</h1>
-            <p className="text-sm text-slate-500 dark:text-gray-400 mt-0.5">
+            <h1 className="text-2xl font-bold text-notion-text dark:text-white">Links</h1>
+            <p className="text-sm text-notion-muted dark:text-gray-400 mt-0.5">
               {bookmarks.length} saved · {bookmarks.filter(b => b.pinned).length} pinned
             </p>
           </div>
           <div className="flex gap-2 flex-wrap justify-end">
             <button
               onClick={() => setShowChromeImport(true)}
-              className="flex items-center gap-2 px-3 py-2.5 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white rounded-xl font-medium text-sm transition-colors"
+              className="flex items-center gap-2 px-3 py-2.5 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 border border-cream-400 dark:border-gray-700 text-notion-text dark:text-white rounded-xl font-medium text-sm transition-colors"
             >
               <Chrome size={15} />
               <span className="hidden sm:inline">Import Chrome</span>
             </button>
             <button
               onClick={() => setShowCatModal(true)}
-              className="flex items-center gap-2 px-3 py-2.5 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white rounded-xl font-medium text-sm transition-colors"
+              className="flex items-center gap-2 px-3 py-2.5 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 border border-cream-400 dark:border-gray-700 text-notion-text dark:text-white rounded-xl font-medium text-sm transition-colors"
             >
               <FolderPlus size={15} />
               <span className="hidden sm:inline">Category</span>
@@ -825,23 +825,23 @@ export default function LinksView() {
 
         {/* Pinning hint */}
         {bookmarks.length > 0 && bookmarks.filter(b => b.pinned).length === 0 && (
-          <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-xl px-4 py-3 mb-4 flex items-center gap-3">
+          <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-xl px-4 py-3 mb-4 flex items-center gap-3">
             <Pin size={14} className="text-yellow-400 flex-shrink-0" />
-            <p className="text-xs text-slate-500 dark:text-gray-400">
-              <span className="text-slate-600 dark:text-gray-300 font-medium">Tip:</span> Hover over any link and click the pin icon to add it to your bookmarks bar at the top.
+            <p className="text-xs text-notion-muted dark:text-gray-400">
+              <span className="text-notion-text/80 dark:text-gray-300 font-medium">Tip:</span> Hover over any link and click the pin icon to add it to your bookmarks bar at the top.
             </p>
           </div>
         )}
 
         {/* Search */}
         <div className="relative mb-4">
-          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500" />
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-notion-muted dark:text-gray-500" />
           <input
             type="text"
             placeholder="Search links..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:border-slate-300 dark:focus:border-gray-700"
+            className="w-full bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-xl pl-10 pr-4 py-2.5 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-cream-400 dark:focus:border-gray-700"
           />
         </div>
 
@@ -850,7 +850,7 @@ export default function LinksView() {
           <button
             onClick={() => setFilterCat('all')}
             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              filterCat === 'all' ? 'bg-slate-200 dark:bg-gray-700 text-slate-900 dark:text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white'
+              filterCat === 'all' ? 'bg-cream-300 dark:bg-gray-700 text-notion-text dark:text-white' : 'text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white'
             }`}
           >
             All
@@ -862,7 +862,7 @@ export default function LinksView() {
                 key={cat.id}
                 onClick={() => setFilterCat(cat.id)}
                 className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                  filterCat === cat.id ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white'
+                  filterCat === cat.id ? 'text-notion-text dark:text-white' : 'text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white'
                 }`}
                 style={filterCat === cat.id ? { background: cat.color + '30', color: cat.color } : {}}
               >
@@ -882,7 +882,7 @@ export default function LinksView() {
       {/* Links list */}
       <div className="flex-1 overflow-y-auto px-6 pb-6">
         {filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-40 text-slate-400 dark:text-gray-600">
+          <div className="flex flex-col items-center justify-center h-40 text-notion-muted dark:text-gray-600">
             <Bookmark size={32} className="mb-3 opacity-40" />
             <p className="text-sm">{search ? 'No links match your search' : 'No links saved yet'}</p>
             <div className="flex gap-3 mt-3">
@@ -904,12 +904,12 @@ export default function LinksView() {
                     <div className="flex items-center gap-2">
                       <span className="text-base">{cat.emoji}</span>
                       <h2 className="text-sm font-semibold" style={{ color: cat.color }}>{cat.label}</h2>
-                      <span className="text-xs text-slate-400 dark:text-gray-600">{grouped[cat.id].length}</span>
+                      <span className="text-xs text-notion-muted dark:text-gray-600">{grouped[cat.id].length}</span>
                     </div>
                     {cat.id !== 'uncategorized' && (
                       <button
                         onClick={() => handleDeleteCategory(cat.id)}
-                        className="p-1 rounded-lg hover:bg-red-500/10 text-slate-300 dark:text-gray-700 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                        className="p-1 rounded-lg hover:bg-red-500/10 text-cream-400 dark:text-gray-700 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
                         title="Delete category"
                       >
                         <Trash2 size={12} />

@@ -44,32 +44,32 @@ export default function HomeView({ onNavigate }) {
       <div className="p-6 space-y-6">
         {/* Greeting */}
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{greeting} 👋</h1>
-          <p className="text-sm text-slate-400 dark:text-gray-500 mt-0.5">{dateStr}</p>
+          <h1 className="text-2xl font-bold text-notion-text dark:text-white">{greeting} 👋</h1>
+          <p className="text-sm text-notion-muted dark:text-gray-500 mt-0.5">{dateStr}</p>
         </div>
 
         {/* Stats row — placeholder for future widgets */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <button
             onClick={() => onNavigate('projects')}
-            className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4 text-left hover:border-slate-300 dark:hover:border-gray-700 transition-colors group"
+            className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-2xl p-4 text-left hover:border-cream-400 dark:hover:border-gray-700 transition-colors group"
           >
             <div className="text-2xl mb-2">📁</div>
             <div className="text-2xl font-bold text-blue-500">{activeProjects.length}</div>
-            <div className="text-xs text-slate-400 dark:text-gray-500 mt-0.5 group-hover:text-slate-500 dark:group-hover:text-gray-400 transition-colors">Active Projects</div>
+            <div className="text-xs text-notion-muted dark:text-gray-500 mt-0.5 group-hover:text-notion-muted dark:group-hover:text-gray-400 transition-colors">Active Projects</div>
           </button>
         </div>
 
         {/* Quick add */}
-        <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-4">
-          <h2 className="text-sm font-medium text-slate-500 dark:text-gray-300 mb-3">Quick Add Task</h2>
+        <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-2xl p-4">
+          <h2 className="text-sm font-medium text-notion-muted dark:text-gray-300 mb-3">Quick Add Task</h2>
           <form onSubmit={handleQuickAdd} className="flex gap-2">
             <input
               type="text"
               placeholder="What needs doing? (press Enter to add details)"
               value={quickTitle}
               onChange={e => setQuickTitle(e.target.value)}
-              className="flex-1 bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
+              className="flex-1 bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-4 py-2.5 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
             />
             <button
               type="submit"
@@ -110,10 +110,10 @@ export default function HomeView({ onNavigate }) {
         {activeProjects.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-slate-500 dark:text-gray-300">Active Projects</h2>
+              <h2 className="text-sm font-semibold text-notion-muted dark:text-gray-300">Active Projects</h2>
               <button
                 onClick={() => onNavigate('projects')}
-                className="text-xs text-slate-400 dark:text-gray-500 hover:text-slate-500 dark:hover:text-gray-300 flex items-center gap-0.5"
+                className="text-xs text-notion-muted dark:text-gray-500 hover:text-notion-muted dark:hover:text-gray-300 flex items-center gap-0.5"
               >
                 View all <ChevronRight size={12} />
               </button>
@@ -134,10 +134,10 @@ export default function HomeView({ onNavigate }) {
         {recentTasks.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-slate-500 dark:text-gray-300">Open Tasks</h2>
+              <h2 className="text-sm font-semibold text-notion-muted dark:text-gray-300">Open Tasks</h2>
               <button
                 onClick={() => onNavigate('tasks')}
-                className="text-xs text-slate-400 dark:text-gray-500 hover:text-slate-500 dark:hover:text-gray-300 flex items-center gap-0.5"
+                className="text-xs text-notion-muted dark:text-gray-500 hover:text-notion-muted dark:hover:text-gray-300 flex items-center gap-0.5"
               >
                 View all <ChevronRight size={12} />
               </button>
@@ -152,9 +152,9 @@ export default function HomeView({ onNavigate }) {
 
         {/* Empty state */}
         {pendingTasks.length === 0 && activeProjects.length === 0 && (
-          <div className="text-center py-12 text-slate-400 dark:text-gray-600">
+          <div className="text-center py-12 text-notion-muted dark:text-gray-600">
             <CheckCircle2 size={48} className="mx-auto mb-4 opacity-30" />
-            <p className="text-lg font-medium text-slate-400 dark:text-gray-500">You're all caught up!</p>
+            <p className="text-lg font-medium text-notion-muted dark:text-gray-500">You're all caught up!</p>
             <p className="text-sm mt-1">Use the quick add above or visit Projects to get started.</p>
           </div>
         )}

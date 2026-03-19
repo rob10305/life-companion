@@ -126,12 +126,12 @@ export default function ImportModal({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl w-full max-w-xl shadow-2xl my-4">
+      <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-700 rounded-2xl w-full max-w-xl shadow-2xl my-4">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900 rounded-t-2xl z-10">
+        <div className="flex items-center justify-between p-5 border-b border-cream-300 dark:border-gray-800 sticky top-0 bg-white dark:bg-gray-900 rounded-t-2xl z-10">
           <div className="flex items-center gap-3">
             {phase === 'preview' && (
-              <button onClick={goBack} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white mr-1">
+              <button onClick={goBack} className="p-1.5 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white mr-1">
                 <ChevronLeft size={18} />
               </button>
             )}
@@ -140,14 +140,14 @@ export default function ImportModal({ onClose }) {
               {phase === 'preview' ? 'Import Preview' : 'Import from GitHub'}
             </h2>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white">
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white">
             <X size={18} />
           </button>
         </div>
 
         {/* Loading repos */}
         {phase === 'loading-repos' && (
-          <div className="flex flex-col items-center justify-center py-16 text-slate-500 dark:text-gray-400">
+          <div className="flex flex-col items-center justify-center py-16 text-notion-muted dark:text-gray-400">
             <Loader2 size={28} className="animate-spin text-blue-400 mb-3" />
             <p className="text-sm">Loading your repositories...</p>
           </div>
@@ -161,7 +161,7 @@ export default function ImportModal({ onClose }) {
               <p className="text-sm text-red-300 mb-3">{error}</p>
               <button
                 onClick={selectedRepo ? () => handleSelectRepo(selectedRepo) : fetchRepos}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-900 dark:text-white rounded-xl text-sm transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 text-notion-text dark:text-white rounded-xl text-sm transition-colors"
               >
                 <RefreshCw size={14} /> Try again
               </button>
@@ -174,21 +174,21 @@ export default function ImportModal({ onClose }) {
           <div className="p-5">
             {/* Search */}
             <div className="relative mb-3">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500" />
+              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-notion-muted dark:text-gray-500" />
               <input
                 autoFocus
                 type="text"
                 placeholder="Search repositories..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
+                className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
               />
             </div>
 
             {/* Repo list */}
             <div className="max-h-80 overflow-y-auto space-y-1.5 -mx-1 px-1">
               {filteredRepos.length === 0 ? (
-                <p className="text-center text-slate-400 dark:text-gray-600 text-sm py-8">
+                <p className="text-center text-notion-muted dark:text-gray-600 text-sm py-8">
                   {search ? 'No repos match your search' : 'No repositories found'}
                 </p>
               ) : (
@@ -196,30 +196,30 @@ export default function ImportModal({ onClose }) {
                   <button
                     key={repo.full_name}
                     onClick={() => handleSelectRepo(repo)}
-                    className="w-full flex items-center gap-3 px-3 py-3 rounded-xl border border-transparent hover:bg-slate-100 dark:hover:bg-gray-800 hover:border-slate-300 dark:hover:border-gray-700 text-left transition-all group"
+                    className="w-full flex items-center gap-3 px-3 py-3 rounded-xl border border-transparent hover:bg-cream-200 dark:hover:bg-gray-800 hover:border-cream-400 dark:hover:border-gray-700 text-left transition-all group"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-slate-900 dark:text-white truncate group-hover:text-blue-300 transition-colors">
+                        <span className="text-sm font-medium text-notion-text dark:text-white truncate group-hover:text-blue-300 transition-colors">
                           {repo.name}
                         </span>
                         {repo.isPrivate ? (
                           <Lock size={11} className="text-yellow-500 flex-shrink-0" />
                         ) : (
-                          <Globe2 size={11} className="text-slate-400 dark:text-gray-500 flex-shrink-0" />
+                          <Globe2 size={11} className="text-notion-muted dark:text-gray-500 flex-shrink-0" />
                         )}
                       </div>
                       {repo.description && (
-                        <p className="text-xs text-slate-400 dark:text-gray-500 truncate mt-0.5">{repo.description}</p>
+                        <p className="text-xs text-notion-muted dark:text-gray-500 truncate mt-0.5">{repo.description}</p>
                       )}
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {repo.language && (
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-gray-800 text-slate-500 dark:text-gray-400">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-cream-200 dark:bg-gray-800 text-notion-muted dark:text-gray-400">
                           {repo.language}
                         </span>
                       )}
-                      <span className="text-xs text-slate-400 dark:text-gray-600">
+                      <span className="text-xs text-notion-muted dark:text-gray-600">
                         {timeAgo(repo.updated_at)}
                       </span>
                     </div>
@@ -232,10 +232,10 @@ export default function ImportModal({ onClose }) {
 
         {/* Loading details */}
         {phase === 'loading-details' && (
-          <div className="flex flex-col items-center justify-center py-16 text-slate-500 dark:text-gray-400">
+          <div className="flex flex-col items-center justify-center py-16 text-notion-muted dark:text-gray-400">
             <Loader2 size={28} className="animate-spin text-blue-400 mb-3" />
-            <p className="text-sm">Analyzing <span className="text-slate-900 dark:text-white font-medium">{selectedRepo?.name}</span>...</p>
-            <p className="text-xs text-slate-400 dark:text-gray-600 mt-1">Checking package.json, detecting services...</p>
+            <p className="text-sm">Analyzing <span className="text-notion-text dark:text-white font-medium">{selectedRepo?.name}</span>...</p>
+            <p className="text-xs text-notion-muted dark:text-gray-600 mt-1">Checking package.json, detecting services...</p>
           </div>
         )}
 
@@ -248,18 +248,18 @@ export default function ImportModal({ onClose }) {
                 <button
                   type="button"
                   onClick={() => setShowEmojiPicker(v => !v)}
-                  className="w-12 h-12 text-2xl flex items-center justify-center bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl hover:border-slate-400 dark:hover:border-gray-500 transition-colors"
+                  className="w-12 h-12 text-2xl flex items-center justify-center bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl hover:border-cream-400 dark:hover:border-gray-500 transition-colors"
                 >
                   {form.emoji}
                 </button>
                 {showEmojiPicker && (
-                  <div className="absolute top-full left-0 mt-2 z-20 bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl p-2 grid grid-cols-8 gap-1 shadow-xl">
+                  <div className="absolute top-full left-0 mt-2 z-20 bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl p-2 grid grid-cols-8 gap-1 shadow-xl">
                     {PROJECT_EMOJIS.map(e => (
                       <button
                         key={e}
                         type="button"
                         onClick={() => { setForm(f => ({ ...f, emoji: e })); setShowEmojiPicker(false) }}
-                        className={`w-8 h-8 text-lg flex items-center justify-center rounded-lg hover:bg-slate-200 dark:hover:bg-gray-700 ${form.emoji === e ? 'bg-slate-200 dark:bg-gray-600' : ''}`}
+                        className={`w-8 h-8 text-lg flex items-center justify-center rounded-lg hover:bg-cream-300 dark:hover:bg-gray-700 ${form.emoji === e ? 'bg-cream-300 dark:bg-gray-600' : ''}`}
                       >
                         {e}
                       </button>
@@ -271,20 +271,20 @@ export default function ImportModal({ onClose }) {
                 type="text"
                 value={form.name}
                 onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                className="flex-1 bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
+                className="flex-1 bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-4 py-3 text-notion-text dark:text-white focus:outline-none focus:border-blue-500"
               />
             </div>
 
             {/* Color picker */}
             <div>
-              <label className="block text-xs text-slate-500 dark:text-gray-400 mb-2">Color</label>
+              <label className="block text-xs text-notion-muted dark:text-gray-400 mb-2">Color</label>
               <div className="flex gap-2 flex-wrap">
                 {PROJECT_COLORS.map(c => (
                   <button
                     key={c}
                     type="button"
                     onClick={() => setForm(f => ({ ...f, color: c }))}
-                    className={`w-7 h-7 rounded-full transition-all ${form.color === c ? 'ring-2 ring-white ring-offset-2 ring-offset-white dark:ring-offset-gray-900 scale-110' : 'hover:scale-110'}`}
+                    className={`w-7 h-7 rounded-full transition-all ${form.color === c ? 'ring-2 ring-white ring-offset-2 ring-offset-cream-50 dark:ring-offset-gray-900 scale-110' : 'hover:scale-110'}`}
                     style={{ backgroundColor: c }}
                   />
                 ))}
@@ -293,19 +293,19 @@ export default function ImportModal({ onClose }) {
 
             {/* Description */}
             <div>
-              <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Description</label>
+              <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Description</label>
               <input
                 type="text"
                 value={form.description}
                 onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-500"
+                className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-3 py-2.5 text-notion-text dark:text-white text-sm focus:outline-none focus:border-blue-500"
               />
             </div>
 
             {/* Tech stack badges */}
             {techStack.length > 0 && (
               <div>
-                <label className="block text-xs text-slate-500 dark:text-gray-400 mb-2">Detected Tech Stack</label>
+                <label className="block text-xs text-notion-muted dark:text-gray-400 mb-2">Detected Tech Stack</label>
                 <div className="flex gap-2 flex-wrap">
                   {techStack.map(t => (
                     <span key={t} className="text-xs px-2.5 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/20 font-medium">
@@ -319,8 +319,8 @@ export default function ImportModal({ onClose }) {
             {/* Links */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs text-slate-500 dark:text-gray-400">
-                  Detected Links <span className="text-slate-400 dark:text-gray-600">({form.links.length})</span>
+                <label className="text-xs text-notion-muted dark:text-gray-400">
+                  Detected Links <span className="text-notion-muted dark:text-gray-600">({form.links.length})</span>
                 </label>
                 <button
                   type="button"
@@ -332,12 +332,12 @@ export default function ImportModal({ onClose }) {
               </div>
               <div className="space-y-2">
                 {form.links.map(link => (
-                  <div key={link.id} className="bg-slate-100 dark:bg-gray-800 rounded-xl p-3 space-y-2">
+                  <div key={link.id} className="bg-cream-200 dark:bg-gray-800 rounded-xl p-3 space-y-2">
                     <div className="flex gap-2">
                       <select
                         value={link.type}
                         onChange={e => updateLink(link.id, 'type', e.target.value)}
-                        className="bg-slate-200 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg px-2 py-1.5 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-blue-500 flex-shrink-0"
+                        className="bg-cream-300 dark:bg-gray-700 border border-cream-400 dark:border-gray-600 rounded-lg px-2 py-1.5 text-notion-text dark:text-white text-xs focus:outline-none focus:border-blue-500 flex-shrink-0"
                       >
                         {Object.entries(LINK_TYPES).map(([key, val]) => (
                           <option key={key} value={key}>{val.label}</option>
@@ -348,12 +348,12 @@ export default function ImportModal({ onClose }) {
                         placeholder="Label"
                         value={link.label}
                         onChange={e => updateLink(link.id, 'label', e.target.value)}
-                        className="flex-1 bg-slate-200 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg px-2 py-1.5 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-xs focus:outline-none focus:border-blue-500"
+                        className="flex-1 bg-cream-300 dark:bg-gray-700 border border-cream-400 dark:border-gray-600 rounded-lg px-2 py-1.5 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-xs focus:outline-none focus:border-blue-500"
                       />
                       <button
                         type="button"
                         onClick={() => removeLink(link.id)}
-                        className="p-1.5 rounded-lg hover:bg-red-500/20 text-slate-400 dark:text-gray-500 hover:text-red-400 transition-colors flex-shrink-0"
+                        className="p-1.5 rounded-lg hover:bg-red-500/20 text-notion-muted dark:text-gray-500 hover:text-red-400 transition-colors flex-shrink-0"
                       >
                         <Trash2 size={13} />
                       </button>
@@ -363,7 +363,7 @@ export default function ImportModal({ onClose }) {
                       placeholder="https://..."
                       value={link.url}
                       onChange={e => updateLink(link.id, 'url', e.target.value)}
-                      className="w-full bg-slate-200 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg px-2 py-1.5 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 text-xs focus:outline-none focus:border-blue-500"
+                      className="w-full bg-cream-300 dark:bg-gray-700 border border-cream-400 dark:border-gray-600 rounded-lg px-2 py-1.5 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-xs focus:outline-none focus:border-blue-500"
                     />
                   </div>
                 ))}
@@ -372,12 +372,12 @@ export default function ImportModal({ onClose }) {
 
             {/* Notes */}
             <div>
-              <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1.5">Notes</label>
+              <label className="block text-xs text-notion-muted dark:text-gray-400 mb-1.5">Notes</label>
               <textarea
                 value={form.notes}
                 onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
                 rows={3}
-                className="w-full bg-slate-100 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 resize-none"
+                className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-3 py-2.5 text-notion-text dark:text-white text-sm focus:outline-none focus:border-blue-500 resize-none"
               />
             </div>
 
@@ -385,7 +385,7 @@ export default function ImportModal({ onClose }) {
             <div className="flex gap-3 pt-2">
               <button
                 onClick={goBack}
-                className="flex-1 py-2.5 rounded-xl border border-slate-300 dark:border-gray-700 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-gray-600 transition-colors text-sm font-medium"
+                className="flex-1 py-2.5 rounded-xl border border-cream-400 dark:border-gray-700 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white hover:border-cream-400 dark:hover:border-gray-600 transition-colors text-sm font-medium"
               >
                 Back
               </button>

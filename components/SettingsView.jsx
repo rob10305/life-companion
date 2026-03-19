@@ -29,7 +29,7 @@ export default function SettingsView() {
 
   return (
     <div className="flex flex-col h-full overflow-y-auto p-6">
-      <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Settings</h1>
+      <h1 className="text-2xl font-bold text-notion-text dark:text-white mb-6">Settings</h1>
 
       <div className="space-y-4 max-w-lg">
         {/* Sync info */}
@@ -58,21 +58,21 @@ export default function SettingsView() {
         </div>
 
         {/* Backup */}
-        <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-1">Backup & Restore</h3>
-          <p className="text-xs text-slate-500 dark:text-gray-400 mb-4">
+        <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-2xl p-5">
+          <h3 className="text-sm font-semibold text-notion-text dark:text-white mb-1">Backup & Restore</h3>
+          <p className="text-xs text-notion-muted dark:text-gray-400 mb-4">
             Export your data as JSON to back it up or transfer to another browser. Save this file to OneDrive for manual cross-device access.
           </p>
           <div className="flex gap-3 flex-wrap">
             <button
               onClick={exportData}
-              className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white rounded-xl text-sm font-medium transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 border border-cream-400 dark:border-gray-700 text-notion-text dark:text-white rounded-xl text-sm font-medium transition-colors"
             >
               <Download size={15} /> Export Data
             </button>
             <button
               onClick={() => fileRef.current?.click()}
-              className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white rounded-xl text-sm font-medium transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 border border-cream-400 dark:border-gray-700 text-notion-text dark:text-white rounded-xl text-sm font-medium transition-colors"
             >
               <Upload size={15} /> Import Data
             </button>
@@ -87,9 +87,9 @@ export default function SettingsView() {
         </div>
 
         {/* Reset */}
-        <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-1">Reset to Defaults</h3>
-          <p className="text-xs text-slate-500 dark:text-gray-400 mb-4">
+        <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-2xl p-5">
+          <h3 className="text-sm font-semibold text-notion-text dark:text-white mb-1">Reset to Defaults</h3>
+          <p className="text-xs text-notion-muted dark:text-gray-400 mb-4">
             Clear all your data and restore the sample content. Export a backup first!
           </p>
           <button
@@ -101,10 +101,10 @@ export default function SettingsView() {
         </div>
 
         {/* About */}
-        <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5">
-          <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-3">About</h3>
-          <div className="space-y-2 text-xs text-slate-500 dark:text-gray-400">
-            <p><span className="text-slate-600 dark:text-gray-300 font-medium">Life Companion</span> — your personal dashboard</p>
+        <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-2xl p-5">
+          <h3 className="text-sm font-semibold text-notion-text dark:text-white mb-3">About</h3>
+          <div className="space-y-2 text-xs text-notion-muted dark:text-gray-400">
+            <p><span className="text-notion-text/80 dark:text-gray-300 font-medium">Life Companion</span> — your personal dashboard</p>
             <p>Built with Next.js, Tailwind CSS, and local storage persistence.</p>
             <p>Deploy to Vercel or Netlify for access anywhere. Add Supabase for real-time sync across all devices.</p>
           </div>
