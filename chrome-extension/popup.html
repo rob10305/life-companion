@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 360px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0b0f;
+      color: #f9fafb;
+      padding: 0;
+    }
+    .header {
+      background: #111827;
+      padding: 16px 20px;
+      border-bottom: 1px solid #1f2937;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-icon {
+      width: 32px; height: 32px;
+      background: #2563eb;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .header-text h1 { font-size: 14px; font-weight: 700; }
+    .header-text p { font-size: 11px; color: #6b7280; margin-top: 1px; }
+
+    .content { padding: 16px 20px; }
+
+    /* Status card */
+    .status-card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .status-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: #9ca3af;
+    }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .status-dot.green { background: #10b981; }
+    .status-dot.red { background: #ef4444; }
+    .status-dot.yellow { background: #f59e0b; }
+    .status-value { color: #fff; font-weight: 600; margin-left: auto; }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s;
+      margin-bottom: 8px;
+    }
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-primary:disabled {
+      background: #1f2937;
+      color: #4b5563;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: #1f2937;
+      color: #d1d5db;
+      border: 1px solid #374151;
+    }
+    .btn-secondary:hover { background: #374151; }
+
+    /* Progress */
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #1f2937;
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #2563eb;
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+
+    /* Messages */
+    .message {
+      font-size: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+    .message.success { background: #065f4620; border: 1px solid #065f4650; color: #6ee7b7; }
+    .message.error { background: #7f1d1d20; border: 1px solid #7f1d1d50; color: #fca5a5; }
+    .message.info { background: #1e3a5f30; border: 1px solid #1e3a5f50; color: #93c5fd; }
+
+    /* Config section */
+    .config-section {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #1f2937;
+    }
+    .config-label {
+      font-size: 11px;
+      color: #6b7280;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .config-input {
+      width: 100%;
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: white;
+      font-size: 12px;
+      margin-bottom: 8px;
+      outline: none;
+    }
+    .config-input:focus { border-color: #2563eb; }
+    .config-input::placeholder { color: #4b5563; }
+
+    .stats { display: flex; gap: 8px; margin-bottom: 12px; }
+    .stat-box {
+      flex: 1;
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+    .stat-value { font-size: 20px; font-weight: 700; color: #2563eb; }
+    .stat-label { font-size: 10px; color: #6b7280; margin-top: 2px; }
+
+    .footer {
+      padding: 12px 20px;
+      border-top: 1px solid #1f2937;
+      text-align: center;
+    }
+    .footer a {
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 11px;
+    }
+    .footer a:hover { color: #9ca3af; }
+
+    .hidden { display: none !important; }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid #374151;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-icon">&#x1F9ED;</div>
+    <div class="header-text">
+      <h1>Life Companion</h1>
+      <p>Bookmark Sync</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Config needed -->
+    <div id="config-view">
+      <div class="message info">
+        Enter your Supabase credentials to connect. You only need to do this once.
+      </div>
+      <label class="config-label">Supabase URL</label>
+      <input id="supabase-url" class="config-input" placeholder="https://your-project.supabase.co" />
+      <label class="config-label">Supabase Anon Key</label>
+      <input id="supabase-key" class="config-input" placeholder="eyJhbGciOi..." />
+      <button id="save-config" class="btn btn-primary">Save & Connect</button>
+    </div>
+
+    <!-- Main view -->
+    <div id="main-view" class="hidden">
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-value" id="chrome-count">-</div>
+          <div class="stat-label">Chrome Bookmarks</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="supabase-count">-</div>
+          <div class="stat-label">In Supabase</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="new-count">-</div>
+          <div class="stat-label">New</div>
+        </div>
+      </div>
+
+      <div id="status-message"></div>
+
+      <div class="progress-bar hidden" id="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+      </div>
+
+      <button id="import-btn" class="btn btn-primary">
+        Import New Bookmarks
+      </button>
+      <button id="refresh-btn" class="btn btn-secondary">
+        Refresh Counts
+      </button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a id="open-app" href="#">Open Life Companion &rarr;</a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
