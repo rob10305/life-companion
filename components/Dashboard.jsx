@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import {
   LayoutDashboard, FolderKanban, CheckSquare, Settings,
-  Menu, X, Compass, Bot, Bookmark
+  Menu, X, Compass, Bot, Bookmark, Cloud, ExternalLink
 } from 'lucide-react'
 import { DataProvider, useData } from '../lib/DataContext'
 import HomeView from './HomeView'
@@ -102,6 +102,19 @@ function AppShell() {
           <div className="mt-4 pt-4 border-t border-gray-800">
             <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-600">Automation</p>
             <NavItem item={NAV_ITEMS.find(i => i.id === 'agents')} />
+          </div>
+          <div className="mt-4 pt-4 border-t border-gray-800">
+            <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-600">Quick Access</p>
+            <a
+              href="https://onedrive.live.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 transition-all"
+            >
+              <Cloud size={17} />
+              <span className="flex-1 text-left">OneDrive</span>
+              <ExternalLink size={12} className="text-gray-600" />
+            </a>
           </div>
           <div className="mt-4 pt-4 border-t border-gray-800 space-y-1">
             <NavItem item={NAV_ITEMS.find(i => i.id === 'settings')} />
