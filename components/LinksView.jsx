@@ -3,7 +3,7 @@ import { useState, useMemo } from 'react'
 import {
   Plus, Search, ExternalLink, Pencil, Trash2, Bookmark, X,
   FolderPlus, Globe, Pin, PinOff, Chrome, Loader2, Download,
-  CheckCircle2, AlertTriangle
+  CheckCircle2, AlertTriangle, Upload
 } from 'lucide-react'
 import { useData } from '../lib/DataContext'
 import { generateId } from '../lib/utils'
@@ -41,13 +41,49 @@ function BookmarksBar({ bookmarks, onTogglePin }) {
 
 /* ─── Chrome Import Modal ──────────────────────────────────── */
 
+function parseBookmarksHtml(html) {
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, 'text/html')
+  const results = []
+
+  function walk(node, folder) {
+    for (const child of node.children) {
+      if (child.tagName === 'DT') {
+        const a = child.querySelector(':scope > A')
+        const dl = child.querySelector(':scope > DL')
+        const h3 = child.querySelector(':scope > H3')
+        if (a) {
+          results.push({
+            title: a.textContent.trim() || 'Untitled',
+            url: a.getAttribute('HREF') || '',
+            folder: folder,
+            dateAdded: a.getAttribute('ADD_DATE')
+              ? new Date(Number(a.getAttribute('ADD_DATE')) * 1000).toISOString()
+              : null,
+          })
+        }
+        if (h3 && dl) {
+          const subFolder = folder ? `${folder} / ${h3.textContent.trim()}` : h3.textContent.trim()
+          walk(dl, subFolder)
+        } else if (dl) {
+          walk(dl, folder)
+        }
+      } else if (child.tagName === 'DL') {
+        walk(child, folder)
+      }
+    }
+  }
+
+  walk(doc.body, '')
+  return results.filter(b => b.url && b.url.startsWith('http'))
+}
+
 function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose }) {
   const [phase, setPhase] = useState('idle') // idle | loading | preview | error
   const [chromeBookmarks, setChromeBookmarks] = useState([])
   const [selected, setSelected] = useState(new Set())
   const [defaultCategory, setDefaultCategory] = useState('uncategorized')
   const [error, setError] = useState('')
-  const [importCount, setImportCount] = useState(0)
 
   async function fetchChromeBookmarks() {
     setPhase('loading')
@@ -60,15 +96,35 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
         setPhase('error')
         return
       }
-      // Filter out already-imported URLs
       const fresh = data.bookmarks.filter(b => !existingUrls.has(b.url))
       setChromeBookmarks(fresh)
       setSelected(new Set(fresh.map((_, i) => i)))
       setPhase('preview')
     } catch {
-      setError('Failed to connect. This only works when running locally (not on Vercel).')
+      setError('Failed to connect. Try uploading an exported bookmarks file instead.')
       setPhase('error')
     }
+  }
+
+  function handleFileUpload(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setPhase('loading')
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      try {
+        const parsed = parseBookmarksHtml(ev.target.result)
+        const fresh = parsed.filter(b => !existingUrls.has(b.url))
+        setChromeBookmarks(fresh)
+        setSelected(new Set(fresh.map((_, i) => i)))
+        setPhase('preview')
+      } catch {
+        setError('Could not parse the bookmarks file. Make sure it\'s a Chrome HTML export.')
+        setPhase('error')
+      }
+    }
+    reader.readAsText(file)
+    e.target.value = ''
   }
 
   function toggleSelect(idx) {
@@ -118,21 +174,44 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
           </button>
         </div>
 
-        {/* Idle — start button */}
+        {/* Idle — two import options */}
         {phase === 'idle' && (
-          <div className="p-6 text-center">
-            <Chrome size={40} className="mx-auto text-gray-600 mb-4" />
-            <h3 className="text-sm font-medium text-white mb-2">Read your Chrome bookmarks</h3>
-            <p className="text-xs text-gray-400 mb-6 max-w-sm mx-auto leading-relaxed">
-              This reads Chrome's bookmarks file directly from your computer.
-              Works when running locally — not available on deployed Vercel instances.
-            </p>
-            <button
-              onClick={fetchChromeBookmarks}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-colors"
-            >
-              <Download size={15} /> Scan Chrome Bookmarks
-            </button>
+          <div className="p-6 space-y-4">
+            {/* Option 1: Upload exported file (works everywhere) */}
+            <div className="bg-gray-800 rounded-xl p-5 text-center">
+              <Upload size={28} className="mx-auto text-blue-400 mb-3" />
+              <h3 className="text-sm font-medium text-white mb-1">Upload bookmarks file</h3>
+              <p className="text-xs text-gray-400 mb-4 max-w-sm mx-auto leading-relaxed">
+                In Chrome: go to <span className="text-gray-300">chrome://bookmarks</span> → click
+                the <span className="text-gray-300">three dots menu</span> (top right) → <span className="text-gray-300">Export bookmarks</span>.
+                Then upload the HTML file here.
+              </p>
+              <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-colors cursor-pointer">
+                <Upload size={15} /> Choose File
+                <input type="file" accept=".html,.htm" onChange={handleFileUpload} className="hidden" />
+              </label>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-gray-800" />
+              <span className="text-xs text-gray-600">or</span>
+              <div className="flex-1 h-px bg-gray-800" />
+            </div>
+
+            {/* Option 2: Auto-scan (local only) */}
+            <div className="bg-gray-800/50 rounded-xl p-4 text-center">
+              <h3 className="text-sm font-medium text-gray-300 mb-1">Auto-scan (local dev only)</h3>
+              <p className="text-xs text-gray-500 mb-3">
+                Reads Chrome's bookmarks file from disk. Only works when running locally with Node.js.
+              </p>
+              <button
+                onClick={fetchChromeBookmarks}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-xl text-xs font-medium transition-colors"
+              >
+                <Download size={13} /> Scan Local Chrome
+              </button>
+            </div>
           </div>
         )}
 
