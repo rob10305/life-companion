@@ -177,40 +177,44 @@ function ChromeImportModal({ existingUrls, bookmarkCategories, onImport, onClose
         {/* Idle — two import options */}
         {phase === 'idle' && (
           <div className="p-6 space-y-4">
-            {/* Option 1: Upload exported file (works everywhere) */}
-            <div className="bg-gray-800 rounded-xl p-5 text-center">
-              <Upload size={28} className="mx-auto text-blue-400 mb-3" />
-              <h3 className="text-sm font-medium text-white mb-1">Upload bookmarks file</h3>
-              <p className="text-xs text-gray-400 mb-4 max-w-sm mx-auto leading-relaxed">
-                In Chrome: go to <span className="text-gray-300">chrome://bookmarks</span> → click
-                the <span className="text-gray-300">three dots menu</span> (top right) → <span className="text-gray-300">Export bookmarks</span>.
-                Then upload the HTML file here.
-              </p>
-              <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-colors cursor-pointer">
-                <Upload size={15} /> Choose File
-                <input type="file" accept=".html,.htm" onChange={handleFileUpload} className="hidden" />
-              </label>
+            {/* Option 1: Local script (recommended) */}
+            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-5">
+              <div className="flex items-start gap-3">
+                <Download size={20} className="text-blue-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="text-sm font-medium text-white mb-1">Auto-import (recommended)</h3>
+                  <p className="text-xs text-gray-400 leading-relaxed mb-2">
+                    Run <code className="bg-gray-800 px-1.5 py-0.5 rounded text-blue-300">import-chrome-bookmarks.bat</code> from
+                    the project folder on your PC. It reads Chrome bookmarks and pushes them straight to Supabase.
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Requires a <code className="bg-gray-800 px-1 rounded">.env.local</code> file with your Supabase credentials.
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Divider */}
             <div className="flex items-center gap-3">
               <div className="flex-1 h-px bg-gray-800" />
-              <span className="text-xs text-gray-600">or</span>
+              <span className="text-xs text-gray-600">or upload manually</span>
               <div className="flex-1 h-px bg-gray-800" />
             </div>
 
-            {/* Option 2: Auto-scan (local only) */}
-            <div className="bg-gray-800/50 rounded-xl p-4 text-center">
-              <h3 className="text-sm font-medium text-gray-300 mb-1">Auto-scan (local dev only)</h3>
-              <p className="text-xs text-gray-500 mb-3">
-                Reads Chrome's bookmarks file from disk. Only works when running locally with Node.js.
+            {/* Option 2: Upload exported file */}
+            <div className="bg-gray-800 rounded-xl p-5 text-center">
+              <Upload size={24} className="mx-auto text-gray-400 mb-3" />
+              <h3 className="text-sm font-medium text-white mb-1">Upload bookmarks file</h3>
+              <p className="text-xs text-gray-400 mb-2 max-w-sm mx-auto leading-relaxed">
+                In Chrome: <span className="text-gray-300">chrome://bookmarks</span> → three dots → Export bookmarks.
               </p>
-              <button
-                onClick={fetchChromeBookmarks}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-xl text-xs font-medium transition-colors"
-              >
-                <Download size={13} /> Scan Local Chrome
-              </button>
+              <p className="text-xs text-gray-500 mb-4">
+                Default export location: <code className="bg-gray-700 px-1.5 py-0.5 rounded text-gray-300 text-[10px]">Downloads\bookmarks_*.html</code>
+              </p>
+              <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-xl text-sm font-medium transition-colors cursor-pointer">
+                <Upload size={15} /> Choose File
+                <input type="file" accept=".html,.htm" onChange={handleFileUpload} className="hidden" />
+              </label>
             </div>
           </div>
         )}
