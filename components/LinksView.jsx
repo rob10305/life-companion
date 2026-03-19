@@ -12,10 +12,24 @@ import { generateId } from '../lib/utils'
 
 function BookmarksBar({ bookmarks, onTogglePin }) {
   const pinned = bookmarks.filter(b => b.pinned)
+  const [contextMenu, setContextMenu] = useState(null)
+
   if (pinned.length === 0) return null
 
+  function handleContextMenu(e, bm) {
+    e.preventDefault()
+    setContextMenu({ x: e.clientX, y: e.clientY, bookmark: bm })
+  }
+
+  function handleUnpin() {
+    if (contextMenu?.bookmark) {
+      onTogglePin(contextMenu.bookmark.id)
+    }
+    setContextMenu(null)
+  }
+
   return (
-    <div className="flex-shrink-0 border-b border-gray-800 bg-gray-900/50">
+    <div className="flex-shrink-0 border-b border-gray-800 bg-gray-900/50" onClick={() => setContextMenu(null)}>
       <div className="flex items-center gap-1 px-4 py-2 overflow-x-auto">
         <Bookmark size={13} className="text-gray-600 flex-shrink-0 mr-1" />
         {pinned.map(bm => {
@@ -27,6 +41,7 @@ function BookmarksBar({ bookmarks, onTogglePin }) {
               href={bm.url}
               target="_blank"
               rel="noopener noreferrer"
+              onContextMenu={(e) => handleContextMenu(e, bm)}
               className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-gray-300 hover:text-white hover:bg-gray-800 transition-all flex-shrink-0 max-w-[160px]"
             >
               {favicon && <img src={favicon} alt="" className="w-4 h-4 flex-shrink-0" />}
@@ -35,6 +50,37 @@ function BookmarksBar({ bookmarks, onTogglePin }) {
           )
         })}
       </div>
+
+      {/* Right-click context menu */}
+      {contextMenu && (
+        <>
+          <div className="fixed inset-0 z-50" onClick={() => setContextMenu(null)} onContextMenu={e => { e.preventDefault(); setContextMenu(null) }} />
+          <div
+            className="fixed z-50 bg-gray-800 border border-gray-700 rounded-xl shadow-2xl py-1 min-w-[160px]"
+            style={{ left: contextMenu.x, top: contextMenu.y }}
+          >
+            <div className="px-3 py-1.5 text-xs text-gray-500 truncate max-w-[200px]">
+              {contextMenu.bookmark.title}
+            </div>
+            <div className="h-px bg-gray-700 my-1" />
+            <button
+              onClick={handleUnpin}
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition-colors text-left"
+            >
+              <PinOff size={13} /> Unpin from bar
+            </button>
+            <a
+              href={contextMenu.bookmark.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setContextMenu(null)}
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 hover:bg-gray-700 hover:text-white transition-colors text-left"
+            >
+              <ExternalLink size={13} /> Open in new tab
+            </a>
+          </div>
+        </>
+      )}
     </div>
   )
 }
