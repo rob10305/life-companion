@@ -94,7 +94,15 @@ export function DataProvider({ children }) {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) {
         const parsed = JSON.parse(saved)
-        dispatch({ type: 'LOAD_DATA', payload: parsed })
+        // Merge with INITIAL_DATA so new fields get defaults
+        const merged = {
+          ...INITIAL_DATA,
+          ...parsed,
+          // Only use INITIAL_DATA for fields that are completely missing
+          bookmarks: parsed.bookmarks ?? INITIAL_DATA.bookmarks,
+          bookmarkCategories: parsed.bookmarkCategories ?? INITIAL_DATA.bookmarkCategories,
+        }
+        dispatch({ type: 'LOAD_DATA', payload: merged })
       }
     } catch (e) {
       console.warn('Could not load saved data:', e)
