@@ -1,6 +1,9 @@
 'use client'
 import { useState } from 'react'
-import { Plus, ChevronRight, AlertCircle, Calendar, CheckCircle2 } from 'lucide-react'
+import {
+  Plus, ChevronRight, AlertCircle, Calendar, CheckCircle2,
+  FolderKanban, CheckSquare, Bookmark, Bot, Settings, Wrench
+} from 'lucide-react'
 import { useData } from '../lib/DataContext'
 import TaskItem from './TaskItem'
 import TaskModal from './TaskModal'
@@ -48,16 +51,38 @@ export default function HomeView({ onNavigate }) {
           <p className="text-sm text-notion-muted dark:text-gray-500 mt-0.5">{dateStr}</p>
         </div>
 
-        {/* Stats row — placeholder for future widgets */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <button
-            onClick={() => onNavigate('projects')}
-            className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-2xl p-4 text-left hover:border-cream-400 dark:hover:border-gray-700 transition-colors group"
-          >
-            <div className="text-2xl mb-2">📁</div>
-            <div className="text-2xl font-bold text-blue-500">{activeProjects.length}</div>
-            <div className="text-xs text-notion-muted dark:text-gray-500 mt-0.5 group-hover:text-notion-muted dark:group-hover:text-gray-400 transition-colors">Active Projects</div>
-          </button>
+        {/* Navigation grid */}
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5 sm:gap-3">
+          {[
+            { id: 'projects', label: 'Projects', icon: FolderKanban, color: '#3B82F6', count: activeProjects.length },
+            { id: 'tasks',    label: 'Tasks',    icon: CheckSquare,  color: '#10B981', count: pendingTasks.length },
+            { id: 'links',    label: 'Links',    icon: Bookmark,     color: '#F59E0B', count: null },
+            { id: 'agents',   label: 'Agents',   icon: Bot,          color: '#8B5CF6', count: null },
+            { id: 'settings', label: 'Settings', icon: Settings,     color: '#6B7280', count: null },
+            { id: 'tools',    label: 'AI Tools',  icon: Wrench,       color: '#EC4899', count: null },
+          ].map(item => {
+            const Icon = item.icon
+            return (
+              <button
+                key={item.id}
+                onClick={() => onNavigate(item.id === 'tools' ? 'agents' : item.id)}
+                className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-2xl p-3 sm:p-4 flex flex-col items-center gap-2 hover:border-cream-400 dark:hover:border-gray-700 hover:shadow-sm transition-all group"
+              >
+                <div
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105"
+                  style={{ background: item.color + '15' }}
+                >
+                  <Icon size={20} style={{ color: item.color }} />
+                </div>
+                <span className="text-xs font-medium text-notion-text dark:text-white">{item.label}</span>
+                {item.count !== null && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ background: item.color + '20', color: item.color }}>
+                    {item.count}
+                  </span>
+                )}
+              </button>
+            )
+          })}
         </div>
 
         {/* Quick add */}
