@@ -1,13 +1,15 @@
 'use client'
 import { useState } from 'react'
-import { Plus, Search, FolderKanban } from 'lucide-react'
+import { Plus, Search, FolderKanban, GitBranch } from 'lucide-react'
 import { useData } from '../lib/DataContext'
 import ProjectCard from './ProjectCard'
 import ProjectModal from './ProjectModal'
+import ImportModal from './ImportModal'
 
 export default function ProjectsView() {
   const { projects } = useData()
   const [showModal, setShowModal] = useState(false)
+  const [showImport, setShowImport] = useState(false)
   const [editingProject, setEditingProject] = useState(null)
   const [search, setSearch] = useState('')
   const [filterStatus, setFilterStatus] = useState('active')
@@ -39,13 +41,22 @@ export default function ProjectsView() {
               {projects.filter(p => p.status === 'active').length} active
             </p>
           </div>
-          <button
-            onClick={() => { setEditingProject(null); setShowModal(true) }}
-            className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-medium text-sm transition-colors shadow-lg shadow-blue-500/20"
-          >
-            <Plus size={16} />
-            New Project
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowImport(true)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white rounded-xl font-medium text-sm transition-colors"
+            >
+              <GitBranch size={16} />
+              Import from GitHub
+            </button>
+            <button
+              onClick={() => { setEditingProject(null); setShowModal(true) }}
+              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-medium text-sm transition-colors shadow-lg shadow-blue-500/20"
+            >
+              <Plus size={16} />
+              New Project
+            </button>
+          </div>
         </div>
 
         {/* Search + filter */}
@@ -112,6 +123,9 @@ export default function ProjectsView() {
 
       {showModal && (
         <ProjectModal project={editingProject} onClose={handleClose} />
+      )}
+      {showImport && (
+        <ImportModal onClose={() => setShowImport(false)} />
       )}
     </div>
   )
