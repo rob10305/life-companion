@@ -57,6 +57,18 @@ function reducer(state, action) {
       }
     case 'DELETE_BOOKMARK':
       return { ...state, bookmarks: (state.bookmarks || []).filter(b => b.id !== action.payload) }
+    case 'TOGGLE_BOOKMARK_PIN':
+      return {
+        ...state,
+        bookmarks: (state.bookmarks || []).map(b =>
+          b.id === action.payload ? { ...b, pinned: !b.pinned } : b
+        ),
+      }
+    case 'IMPORT_BOOKMARKS':
+      return {
+        ...state,
+        bookmarks: [...(state.bookmarks || []), ...action.payload],
+      }
     case 'ADD_BOOKMARK_CATEGORY':
       return { ...state, bookmarkCategories: [...(state.bookmarkCategories || []), action.payload] }
     case 'DELETE_BOOKMARK_CATEGORY':
@@ -169,6 +181,14 @@ export function DataProvider({ children }) {
     })
   }, [])
 
+  const toggleBookmarkPin = useCallback((id) => {
+    dispatch({ type: 'TOGGLE_BOOKMARK_PIN', payload: id })
+  }, [])
+
+  const importBookmarks = useCallback((bookmarksArray) => {
+    dispatch({ type: 'IMPORT_BOOKMARKS', payload: bookmarksArray })
+  }, [])
+
   const deleteBookmarkCategory = useCallback((id) => {
     dispatch({ type: 'DELETE_BOOKMARK_CATEGORY', payload: id })
   }, [])
@@ -217,6 +237,8 @@ export function DataProvider({ children }) {
       addBookmark,
       updateBookmark,
       deleteBookmark,
+      toggleBookmarkPin,
+      importBookmarks,
       addBookmarkCategory,
       deleteBookmarkCategory,
       resetToDefaults,
