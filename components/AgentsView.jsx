@@ -3,8 +3,9 @@ import { useState } from 'react'
 import {
   Bot, Play, Pause, Settings, Clock, ExternalLink,
   Car, Podcast, Youtube, Plus, AlertCircle, CheckCircle2,
-  Zap, Calendar
+  Zap, Calendar, Wrench, Pencil, Trash2, Globe
 } from 'lucide-react'
+import { useData } from '../lib/DataContext'
 
 const AGENT_STATUS = {
   coming_soon: { label: 'Coming Soon', color: 'text-gray-500', bg: 'bg-gray-500/10', border: 'border-gray-500/20' },
@@ -85,6 +86,137 @@ const INITIAL_AGENTS = [
     nextRun: null,
   },
 ]
+
+const INITIAL_TOOLS = [
+  { id: 'tool-flow', title: 'Google Flow', url: 'https://labs.google/flow/about', icon: '🌊' },
+  { id: 'tool-chatgpt', title: 'ChatGPT', url: 'https://chat.openai.com', icon: '💬' },
+  { id: 'tool-gemini', title: 'Gemini', url: 'https://gemini.google.com', icon: '✨' },
+  { id: 'tool-claude', title: 'Claude', url: 'https://claude.ai', icon: '🧠' },
+]
+
+function ToolsSection() {
+  const { bookmarks, addBookmark, deleteBookmark } = useData()
+  const [showAdd, setShowAdd] = useState(false)
+  const [newTitle, setNewTitle] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+
+  // Tools are bookmarks with category 'ai-tools'
+  const tools = bookmarks.filter(b => b.category === 'ai-tools')
+
+  // Seed tools if none exist
+  const [seeded, setSeeded] = useState(false)
+  if (!seeded && tools.length === 0 && bookmarks.length > 0) {
+    // Only seed once
+    setSeeded(true)
+    INITIAL_TOOLS.forEach(tool => {
+      addBookmark({ title: tool.title, url: tool.url, description: tool.icon, category: 'ai-tools' })
+    })
+  }
+
+  function handleAdd(e) {
+    e.preventDefault()
+    if (!newTitle.trim() || !newUrl.trim()) return
+    let url = newUrl.trim()
+    if (!/^https?:\/\//i.test(url)) url = 'https://' + url
+    addBookmark({ title: newTitle.trim(), url, description: '🔧', category: 'ai-tools' })
+    setNewTitle('')
+    setNewUrl('')
+    setShowAdd(false)
+  }
+
+  function handleDelete(id) {
+    deleteBookmark(id)
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <Wrench size={16} className="text-notion-muted dark:text-gray-500" />
+          <h2 className="text-sm font-semibold text-notion-text dark:text-white">AI Tools</h2>
+          <span className="text-xs text-notion-muted dark:text-gray-600">{tools.length}</span>
+        </div>
+        <button
+          onClick={() => setShowAdd(v => !v)}
+          className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-400 transition-colors"
+        >
+          <Plus size={13} /> Add Tool
+        </button>
+      </div>
+
+      {/* Add form */}
+      {showAdd && (
+        <form onSubmit={handleAdd} className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-xl p-3 mb-3 flex gap-2 items-end">
+          <div className="flex-1">
+            <input
+              autoFocus
+              type="text"
+              placeholder="Tool name"
+              value={newTitle}
+              onChange={e => setNewTitle(e.target.value)}
+              className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-lg px-3 py-2 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-xs focus:outline-none focus:border-blue-500 mb-1.5"
+            />
+            <input
+              type="text"
+              placeholder="https://..."
+              value={newUrl}
+              onChange={e => setNewUrl(e.target.value)}
+              className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-lg px-3 py-2 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-xs focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div className="flex gap-1.5">
+            <button type="submit" className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-medium transition-colors">
+              Add
+            </button>
+            <button type="button" onClick={() => setShowAdd(false)} className="px-3 py-2 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 text-notion-muted dark:text-gray-400 rounded-lg text-xs transition-colors">
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Tools grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2">
+        {tools.map(tool => {
+          let favicon = null
+          try { favicon = `https://www.google.com/s2/favicons?sz=32&domain=${new URL(tool.url).hostname}` } catch {}
+          return (
+            <div key={tool.id} className="group relative">
+              <a
+                href={tool.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 hover:border-cream-400 dark:hover:border-gray-700 hover:bg-cream-200/50 dark:hover:bg-gray-800 transition-all"
+              >
+                <div className="w-7 h-7 rounded-lg bg-cream-200 dark:bg-gray-800 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  {favicon ? (
+                    <img src={favicon} alt="" className="w-4 h-4" />
+                  ) : (
+                    <Globe size={14} className="text-notion-muted dark:text-gray-500" />
+                  )}
+                </div>
+                <span className="text-xs font-medium text-notion-text dark:text-white truncate">{tool.title}</span>
+                <ExternalLink size={10} className="text-notion-muted dark:text-gray-600 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+              <button
+                onClick={() => handleDelete(tool.id)}
+                className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+              >
+                <Trash2 size={10} />
+              </button>
+            </div>
+          )
+        })}
+      </div>
+
+      {tools.length === 0 && !showAdd && (
+        <div className="text-center py-6 text-notion-muted dark:text-gray-600 text-xs">
+          No tools added yet. Click "Add Tool" to get started.
+        </div>
+      )}
+    </div>
+  )
+}
 
 function AgentCard({ agent }) {
   const [expanded, setExpanded] = useState(false)
@@ -251,7 +383,7 @@ export default function AgentsView() {
       </div>
 
       {/* Agent cards */}
-      <div className="flex-1 overflow-y-auto px-6 pb-6">
+      <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-8">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           {agents.map(agent => (
             <AgentCard key={agent.id} agent={agent} />
@@ -267,6 +399,9 @@ export default function AgentsView() {
             <span className="text-xs text-cream-400 dark:text-gray-700">Build your own automation</span>
           </button>
         </div>
+
+        {/* AI Tools section */}
+        <ToolsSection />
       </div>
     </div>
   )
