@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #030712;
+  color: #f9fafb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4B5563;
+}
+
+/* Smooth transitions */
+.transition-default {
+  transition: all 0.15s ease;
+}
+
+/* Link type badge colors */
+.badge-files { background: #065F46; color: #6EE7B7; }
+.badge-hosting { background: #1E3A5F; color: #93C5FD; }
+.badge-git { background: #2D1B69; color: #C4B5FD; }
+.badge-live { background: #7C2D12; color: #FCA5A5; }
+.badge-docs { background: #1C1917; color: #D6D3D1; }
+.badge-custom { background: #1F2937; color: #9CA3AF; }
