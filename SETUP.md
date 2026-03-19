@@ -23,67 +23,30 @@ To sync your data across your phone, laptops, and any device, add Supabase as a 
 
 ### 2. Run the database schema
 
-In your Supabase dashboard, go to **SQL Editor** and run this:
+In your Supabase dashboard, go to **SQL Editor** → click **New query** → paste the contents of `supabase-schema.sql` from this project → click **Run**.
 
-```sql
--- Projects
-CREATE TABLE projects (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  description TEXT DEFAULT '',
-  color TEXT DEFAULT '#3B82F6',
-  emoji TEXT DEFAULT '📁',
-  status TEXT DEFAULT 'active',
-  links JSONB DEFAULT '[]',
-  notes TEXT DEFAULT '',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Tasks
-CREATE TABLE tasks (
-  id TEXT PRIMARY KEY,
-  title TEXT NOT NULL,
-  category TEXT DEFAULT 'personal',
-  priority TEXT DEFAULT 'medium',
-  completed BOOLEAN DEFAULT FALSE,
-  due_date DATE,
-  project_id TEXT REFERENCES projects(id) ON DELETE SET NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Categories
-CREATE TABLE categories (
-  id TEXT PRIMARY KEY,
-  label TEXT NOT NULL,
-  color TEXT DEFAULT '#6B7280',
-  emoji TEXT DEFAULT '📌',
-  sort_order INTEGER DEFAULT 0
-);
-
--- Enable Row Level Security (allows public access for personal use)
-ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
-ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
-ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Public access" ON projects FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Public access" ON tasks FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Public access" ON categories FOR ALL USING (true) WITH CHECK (true);
-```
+This creates 5 tables: projects, tasks, categories, bookmarks, bookmark_categories — with RLS and auto-update triggers.
 
 ### 3. Add your API keys
 
 1. In Supabase, go to **Settings → API**
 2. Copy your **Project URL** and **anon/public key**
-3. Create `.env.local` in the project root:
+3. For **local dev**: create `.env.local` in the project root:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 ```
 
-4. Restart the dev server — the app will automatically use Supabase!
+4. For **Vercel**: add the same env vars in Vercel → Project Settings → Environment Variables
+5. Redeploy — the app will automatically detect Supabase and use it!
+
+### How it works
+
+- **With Supabase configured**: data loads from Supabase on page load. All changes write to Supabase and localStorage (cache).
+- **Without Supabase**: data uses localStorage only (single device).
+- **First load with empty DB**: automatically seeds Supabase with the default data.
+- **Offline fallback**: localStorage always has a copy, so the app works even if Supabase is unreachable.
 
 ---
 
@@ -95,13 +58,15 @@ npx vercel
 
 Or connect your GitHub repo at https://vercel.com/new and it deploys automatically.
 
-Add your Supabase env vars in Vercel → Project Settings → Environment Variables.
+Add your Supabase env vars in Vercel → Project Settings → Environment Variables:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `GITHUB_TOKEN` (for Import from GitHub feature)
 
 ## Deploy to Netlify
 
 ```bash
 npm run build
-# then drag the .next folder to Netlify, or use:
 npx netlify-cli deploy
 ```
 
