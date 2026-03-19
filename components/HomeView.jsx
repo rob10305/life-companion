@@ -48,55 +48,16 @@ export default function HomeView({ onNavigate }) {
           <p className="text-sm text-gray-500 mt-0.5">{dateStr}</p>
         </div>
 
-        {/* Stats row */}
+        {/* Stats row — placeholder for future widgets */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {[
-            {
-              label: 'Active Projects',
-              value: activeProjects.length,
-              icon: '📁',
-              color: '#3B82F6',
-              action: () => onNavigate('projects'),
-            },
-            {
-              label: 'Open Tasks',
-              value: pendingTasks.length,
-              icon: '✅',
-              color: '#10B981',
-              action: () => onNavigate('tasks'),
-            },
-            {
-              label: 'Overdue',
-              value: overdueTasks.length,
-              icon: '⚠️',
-              color: overdueTasks.length > 0 ? '#EF4444' : '#6B7280',
-              action: () => onNavigate('tasks'),
-            },
-            {
-              label: 'High Priority',
-              value: highPriority.length,
-              icon: '🔴',
-              color: '#F59E0B',
-              action: () => onNavigate('tasks'),
-            },
-          ].map(stat => (
-            <button
-              key={stat.label}
-              onClick={stat.action}
-              className="bg-gray-900 border border-gray-800 rounded-2xl p-4 text-left hover:border-gray-700 transition-colors group"
-            >
-              <div className="text-2xl mb-2">{stat.icon}</div>
-              <div
-                className="text-2xl font-bold"
-                style={{ color: stat.color }}
-              >
-                {stat.value}
-              </div>
-              <div className="text-xs text-gray-500 mt-0.5 group-hover:text-gray-400 transition-colors">
-                {stat.label}
-              </div>
-            </button>
-          ))}
+          <button
+            onClick={() => onNavigate('projects')}
+            className="bg-gray-900 border border-gray-800 rounded-2xl p-4 text-left hover:border-gray-700 transition-colors group"
+          >
+            <div className="text-2xl mb-2">📁</div>
+            <div className="text-2xl font-bold text-blue-500">{activeProjects.length}</div>
+            <div className="text-xs text-gray-500 mt-0.5 group-hover:text-gray-400 transition-colors">Active Projects</div>
+          </button>
         </div>
 
         {/* Quick add */}

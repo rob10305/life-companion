@@ -2,12 +2,13 @@
 import { useState } from 'react'
 import {
   LayoutDashboard, FolderKanban, CheckSquare, Settings,
-  Menu, X, Compass, Bot
+  Menu, X, Compass, Bot, Bookmark
 } from 'lucide-react'
 import { DataProvider, useData } from '../lib/DataContext'
 import HomeView from './HomeView'
 import ProjectsView from './ProjectsView'
 import TasksView from './TasksView'
+import LinksView from './LinksView'
 import AgentsView from './AgentsView'
 import SettingsView from './SettingsView'
 
@@ -15,6 +16,7 @@ const NAV_ITEMS = [
   { id: 'home',     label: 'Home',     icon: LayoutDashboard },
   { id: 'projects', label: 'Projects', icon: FolderKanban },
   { id: 'tasks',    label: 'Tasks',    icon: CheckSquare },
+  { id: 'links',    label: 'Links',    icon: Bookmark },
   { id: 'agents',   label: 'Agents',   icon: Bot },
   { id: 'settings', label: 'Settings', icon: Settings },
 ]
@@ -22,7 +24,7 @@ const NAV_ITEMS = [
 function AppShell() {
   const [view, setView] = useState('home')
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { projects, tasks, hydrated } = useData()
+  const { projects, tasks, bookmarks, hydrated } = useData()
 
   const pendingCount = tasks.filter(t => !t.completed).length
   const activeProjects = projects.filter(p => p.status === 'active').length
@@ -41,7 +43,7 @@ function AppShell() {
   function NavItem({ item }) {
     const Icon = item.icon
     const isActive = view === item.id
-    const badge = item.id === 'tasks' ? pendingCount : item.id === 'projects' ? activeProjects : 0
+    const badge = item.id === 'tasks' ? pendingCount : item.id === 'projects' ? activeProjects : item.id === 'links' ? bookmarks.length : 0
     return (
       <button
         onClick={() => { setView(item.id); setSidebarOpen(false) }}
@@ -68,6 +70,7 @@ function AppShell() {
     home:     <HomeView onNavigate={setView} />,
     projects: <ProjectsView />,
     tasks:    <TasksView />,
+    links:    <LinksView />,
     agents:   <AgentsView />,
     settings: <SettingsView />,
   }[view]
@@ -92,7 +95,7 @@ function AppShell() {
         {/* Nav */}
         <nav className="flex-1 p-3 overflow-y-auto">
           <div className="space-y-1">
-            {NAV_ITEMS.filter(i => i.id !== 'agents' && i.id !== 'settings').map(item => (
+            {NAV_ITEMS.filter(i => !['agents', 'settings'].includes(i.id)).map(item => (
               <NavItem key={item.id} item={item} />
             ))}
           </div>

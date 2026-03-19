@@ -47,6 +47,26 @@ function reducer(state, action) {
     // Categories
     case 'ADD_CATEGORY':
       return { ...state, categories: [...state.categories, action.payload] }
+    // Bookmarks
+    case 'ADD_BOOKMARK':
+      return { ...state, bookmarks: [action.payload, ...(state.bookmarks || [])] }
+    case 'UPDATE_BOOKMARK':
+      return {
+        ...state,
+        bookmarks: (state.bookmarks || []).map(b => b.id === action.payload.id ? action.payload : b),
+      }
+    case 'DELETE_BOOKMARK':
+      return { ...state, bookmarks: (state.bookmarks || []).filter(b => b.id !== action.payload) }
+    case 'ADD_BOOKMARK_CATEGORY':
+      return { ...state, bookmarkCategories: [...(state.bookmarkCategories || []), action.payload] }
+    case 'DELETE_BOOKMARK_CATEGORY':
+      return {
+        ...state,
+        bookmarkCategories: (state.bookmarkCategories || []).filter(c => c.id !== action.payload),
+        bookmarks: (state.bookmarks || []).map(b =>
+          b.category === action.payload ? { ...b, category: 'uncategorized' } : b
+        ),
+      }
     default:
       return state
   }
@@ -127,6 +147,32 @@ export function DataProvider({ children }) {
     })
   }, [])
 
+  const addBookmark = useCallback((data) => {
+    dispatch({
+      type: 'ADD_BOOKMARK',
+      payload: { ...data, id: generateId('bm'), createdAt: new Date().toISOString() },
+    })
+  }, [])
+
+  const updateBookmark = useCallback((bookmark) => {
+    dispatch({ type: 'UPDATE_BOOKMARK', payload: bookmark })
+  }, [])
+
+  const deleteBookmark = useCallback((id) => {
+    dispatch({ type: 'DELETE_BOOKMARK', payload: id })
+  }, [])
+
+  const addBookmarkCategory = useCallback((data) => {
+    dispatch({
+      type: 'ADD_BOOKMARK_CATEGORY',
+      payload: { ...data, id: generateId('bmcat') },
+    })
+  }, [])
+
+  const deleteBookmarkCategory = useCallback((id) => {
+    dispatch({ type: 'DELETE_BOOKMARK_CATEGORY', payload: id })
+  }, [])
+
   const resetToDefaults = useCallback(() => {
     dispatch({ type: 'LOAD_DATA', payload: INITIAL_DATA })
   }, [])
@@ -166,6 +212,13 @@ export function DataProvider({ children }) {
       deleteTask,
       toggleTask,
       addCategory,
+      bookmarks: state.bookmarks || [],
+      bookmarkCategories: state.bookmarkCategories || [],
+      addBookmark,
+      updateBookmark,
+      deleteBookmark,
+      addBookmarkCategory,
+      deleteBookmarkCategory,
       resetToDefaults,
       exportData,
       importData,
