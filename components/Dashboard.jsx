@@ -2,18 +2,20 @@
 import { useState } from 'react'
 import {
   LayoutDashboard, FolderKanban, CheckSquare, Settings,
-  Menu, X, Compass
+  Menu, X, Compass, Bot
 } from 'lucide-react'
 import { DataProvider, useData } from '../lib/DataContext'
 import HomeView from './HomeView'
 import ProjectsView from './ProjectsView'
 import TasksView from './TasksView'
+import AgentsView from './AgentsView'
 import SettingsView from './SettingsView'
 
 const NAV_ITEMS = [
   { id: 'home',     label: 'Home',     icon: LayoutDashboard },
   { id: 'projects', label: 'Projects', icon: FolderKanban },
   { id: 'tasks',    label: 'Tasks',    icon: CheckSquare },
+  { id: 'agents',   label: 'Agents',   icon: Bot },
   { id: 'settings', label: 'Settings', icon: Settings },
 ]
 
@@ -66,6 +68,7 @@ function AppShell() {
     home:     <HomeView onNavigate={setView} />,
     projects: <ProjectsView />,
     tasks:    <TasksView />,
+    agents:   <AgentsView />,
     settings: <SettingsView />,
   }[view]
 
@@ -87,8 +90,19 @@ function AppShell() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          {NAV_ITEMS.map(item => <NavItem key={item.id} item={item} />)}
+        <nav className="flex-1 p-3 overflow-y-auto">
+          <div className="space-y-1">
+            {NAV_ITEMS.filter(i => i.id !== 'agents' && i.id !== 'settings').map(item => (
+              <NavItem key={item.id} item={item} />
+            ))}
+          </div>
+          <div className="mt-4 pt-4 border-t border-gray-800">
+            <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-600">Automation</p>
+            <NavItem item={NAV_ITEMS.find(i => i.id === 'agents')} />
+          </div>
+          <div className="mt-4 pt-4 border-t border-gray-800 space-y-1">
+            <NavItem item={NAV_ITEMS.find(i => i.id === 'settings')} />
+          </div>
         </nav>
 
         {/* Footer */}
