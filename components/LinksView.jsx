@@ -57,7 +57,7 @@ function BookmarksBar({ bookmarks, onTogglePin }) {
           <div className="fixed inset-0 z-50" onClick={() => setContextMenu(null)} onContextMenu={e => { e.preventDefault(); setContextMenu(null) }} />
           <div
             className="fixed z-50 bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl shadow-2xl py-1 min-w-[160px]"
-            style={{ left: contextMenu.x, top: contextMenu.y }}
+            style={{ left: Math.min(contextMenu.x, window.innerWidth - 180), top: Math.min(contextMenu.y, window.innerHeight - 100) }}
           >
             <div className="px-3 py-1.5 text-xs text-notion-muted dark:text-gray-500 truncate max-w-[200px]">
               {contextMenu.bookmark.title}
@@ -94,7 +94,7 @@ function ExtensionCard() {
 
   return (
     <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-2xl overflow-hidden">
-      <div className="p-4 flex items-center gap-4">
+      <div className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
         <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0">
           <Puzzle size={20} className="text-white" />
         </div>
@@ -793,12 +793,12 @@ export default function LinksView() {
       <div className="flex-shrink-0 p-6 pb-0">
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-notion-text dark:text-white">Links</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-notion-text dark:text-white">Links</h1>
             <p className="text-sm text-notion-muted dark:text-gray-400 mt-0.5">
               {bookmarks.length} saved · {bookmarks.filter(b => b.pinned).length} pinned
             </p>
           </div>
-          <div className="flex gap-2 flex-wrap justify-end">
+          <div className="flex gap-2 flex-wrap justify-end items-center">
             <button
               onClick={() => setShowChromeImport(true)}
               className="flex items-center gap-2 px-3 py-2.5 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 border border-cream-400 dark:border-gray-700 text-notion-text dark:text-white rounded-xl font-medium text-sm transition-colors"
@@ -825,7 +825,7 @@ export default function LinksView() {
 
         {/* Pinning hint */}
         {bookmarks.length > 0 && bookmarks.filter(b => b.pinned).length === 0 && (
-          <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-xl px-4 py-3 mb-4 flex items-center gap-3">
+          <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-xl px-3 py-2.5 mb-4 flex items-center gap-2.5 text-xs">
             <Pin size={14} className="text-yellow-400 flex-shrink-0" />
             <p className="text-xs text-notion-muted dark:text-gray-400">
               <span className="text-notion-text/80 dark:text-gray-300 font-medium">Tip:</span> Hover over any link and click the pin icon to add it to your bookmarks bar at the top.

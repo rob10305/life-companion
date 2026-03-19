@@ -153,7 +153,7 @@ function AppShell() {
           onClick={() => setSidebarOpen(false)}
         />
       )}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-gray-900 border-r border-cream-300 dark:border-gray-800 flex flex-col transform transition-transform duration-200 lg:hidden ${
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-900 border-r border-cream-300 dark:border-gray-800 flex flex-col transform transition-transform duration-200 lg:hidden ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="flex items-center justify-between p-5 border-b border-cream-300 dark:border-gray-800">
@@ -165,7 +165,7 @@ function AppShell() {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <button onClick={() => setSidebarOpen(false)} className="p-1.5 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400">
+            <button onClick={() => setSidebarOpen(false)} className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400">
               <X size={18} />
             </button>
           </div>
@@ -179,7 +179,7 @@ function AppShell() {
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile top bar */}
         <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-cream-300 dark:border-gray-900 bg-white dark:bg-transparent flex-shrink-0">
-          <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400">
+          <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400">
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-2">
@@ -190,13 +190,13 @@ function AppShell() {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden lg:pb-0 pb-16">
           {currentView}
         </div>
 
         {/* Mobile bottom nav */}
         <nav className="lg:hidden flex border-t border-cream-300 dark:border-gray-900 bg-white dark:bg-gray-950 flex-shrink-0 safe-bottom">
-          {NAV_ITEMS.map(item => {
+          {NAV_ITEMS.filter(i => i.id !== 'settings').map(item => {
             const Icon = item.icon
             const isActive = view === item.id
             const badge = item.id === 'tasks' ? pendingCount : 0

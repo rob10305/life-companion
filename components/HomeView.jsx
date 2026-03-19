@@ -44,7 +44,7 @@ export default function HomeView({ onNavigate }) {
       <div className="p-6 space-y-6">
         {/* Greeting */}
         <div>
-          <h1 className="text-2xl font-bold text-notion-text dark:text-white">{greeting} 👋</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-notion-text dark:text-white">{greeting} 👋</h1>
           <p className="text-sm text-notion-muted dark:text-gray-500 mt-0.5">{dateStr}</p>
         </div>
 
@@ -66,7 +66,7 @@ export default function HomeView({ onNavigate }) {
           <form onSubmit={handleQuickAdd} className="flex gap-2">
             <input
               type="text"
-              placeholder="What needs doing? (press Enter to add details)"
+              placeholder="What needs doing?"
               value={quickTitle}
               onChange={e => setQuickTitle(e.target.value)}
               className="flex-1 bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl px-4 py-2.5 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
@@ -74,9 +74,9 @@ export default function HomeView({ onNavigate }) {
             <button
               type="submit"
               disabled={!quickTitle.trim()}
-              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-1.5"
+              className="px-3 sm:px-4 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-1.5 flex-shrink-0"
             >
-              <Plus size={15} /> Add
+              <Plus size={15} /> <span className="hidden sm:inline">Add</span>
             </button>
           </form>
         </div>

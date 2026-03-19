@@ -34,9 +34,9 @@ export default function ProjectsView() {
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex-shrink-0 p-6 pb-4">
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-notion-text dark:text-white">Projects</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-notion-text dark:text-white">Projects</h1>
             <p className="text-sm text-notion-muted dark:text-gray-400 mt-0.5">
               {projects.filter(p => p.status === 'active').length} active
             </p>
@@ -44,17 +44,17 @@ export default function ProjectsView() {
           <div className="flex gap-2">
             <button
               onClick={() => setShowImport(true)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 border border-cream-400 dark:border-gray-700 text-notion-text dark:text-white rounded-xl font-medium text-sm transition-colors"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 border border-cream-400 dark:border-gray-700 text-notion-text dark:text-white rounded-xl font-medium text-xs sm:text-sm transition-colors"
             >
-              <GitBranch size={16} />
-              Import from GitHub
+              <GitBranch size={15} />
+              <span className="hidden sm:inline">Import from</span> GitHub
             </button>
             <button
               onClick={() => { setEditingProject(null); setShowModal(true) }}
-              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-medium text-sm transition-colors shadow-lg shadow-blue-500/20"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-medium text-xs sm:text-sm transition-colors shadow-lg shadow-blue-500/20"
             >
-              <Plus size={16} />
-              New Project
+              <Plus size={15} />
+              New
             </button>
           </div>
         </div>

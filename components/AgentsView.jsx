@@ -200,9 +200,9 @@ function ToolsSection() {
               </a>
               <button
                 onClick={() => handleDelete(tool.id)}
-                className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
               >
-                <Trash2 size={10} />
+                <Trash2 size={11} />
               </button>
             </div>
           )
@@ -228,7 +228,7 @@ function AgentCard({ agent }) {
       {/* Color bar */}
       <div className="h-1" style={{ background: agent.color }} />
 
-      <div className="p-5">
+      <div className="p-4 sm:p-5">
         {/* Header */}
         <div className="flex items-start gap-4">
           <div
@@ -351,7 +351,7 @@ export default function AgentsView() {
       <div className="flex-shrink-0 p-6 pb-4">
         <div className="flex items-center justify-between mb-2">
           <div>
-            <h1 className="text-2xl font-bold text-notion-text dark:text-white">Agents</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-notion-text dark:text-white">Agents</h1>
             <p className="text-sm text-notion-muted dark:text-gray-400 mt-0.5">
               {runningCount} running · {totalCount} total
             </p>
@@ -384,7 +384,7 @@ export default function AgentsView() {
 
       {/* Agent cards */}
       <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-8">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {agents.map(agent => (
             <AgentCard key={agent.id} agent={agent} />
           ))}

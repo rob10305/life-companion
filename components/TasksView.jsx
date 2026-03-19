@@ -44,7 +44,7 @@ export default function TasksView() {
       <div className="flex-shrink-0 p-6 pb-0">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-notion-text dark:text-white">Life Tasks</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-notion-text dark:text-white">Life Tasks</h1>
             <p className="text-sm text-notion-muted dark:text-gray-400 mt-0.5">
               {pendingCount} pending · {doneCount} completed
             </p>
@@ -71,7 +71,7 @@ export default function TasksView() {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-2 flex-wrap pb-4 border-b border-cream-300 dark:border-gray-900">
+        <div className="flex gap-2 pb-4 border-b overflow-x-auto border-cream-300 dark:border-gray-900">
           {/* Status */}
           {[
             { value: 'active', label: 'Pending' },
@@ -81,7 +81,7 @@ export default function TasksView() {
             <button
               key={opt.value}
               onClick={() => setFilterStatus(opt.value)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filterStatus === opt.value
                   ? 'bg-blue-600 text-white'
                   : 'bg-white dark:bg-gray-900 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white border border-cream-300 dark:border-gray-800'
@@ -91,7 +91,7 @@ export default function TasksView() {
             </button>
           ))}
 
-          <div className="w-px bg-cream-200 dark:bg-gray-800 mx-1" />
+          <div className="w-px flex-shrink-0 bg-cream-200 dark:bg-gray-800 mx-1" />
 
           {/* Priority */}
           {[
@@ -103,7 +103,7 @@ export default function TasksView() {
             <button
               key={opt.value}
               onClick={() => setFilterPriority(opt.value)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 filterPriority === opt.value
                   ? 'bg-cream-300 dark:bg-gray-700 text-notion-text dark:text-white'
                   : 'bg-white dark:bg-gray-900 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white border border-cream-300 dark:border-gray-800'

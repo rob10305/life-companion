@@ -68,3 +68,22 @@ html.dark body {
 .badge-live { background: #7C2D12; color: #FCA5A5; }
 .badge-docs { background: #1C1917; color: #D6D3D1; }
 .badge-custom { background: #1F2937; color: #9CA3AF; }
+
+/* ─── Mobile safe areas ─────────────────────────────────────── */
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Bottom nav clearance for mobile content */
+.mobile-content-pad {
+  padding-bottom: 4.5rem;
+}
+
+@media (min-width: 1024px) {
+  .mobile-content-pad {
+    padding-bottom: 0;
+  }
+}
