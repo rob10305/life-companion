@@ -2,9 +2,10 @@
 import { useState } from 'react'
 import {
   LayoutDashboard, FolderKanban, CheckSquare, Settings,
-  Menu, X, Compass, Bot, Bookmark, Cloud, ExternalLink
+  Menu, X, Compass, Bot, Bookmark, Cloud, ExternalLink, Sun, Moon
 } from 'lucide-react'
 import { DataProvider, useData } from '../lib/DataContext'
+import { ThemeProvider, useTheme } from '../lib/ThemeContext'
 import HomeView from './HomeView'
 import ProjectsView from './ProjectsView'
 import TasksView from './TasksView'
@@ -21,6 +22,19 @@ const NAV_ITEMS = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ]
 
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme()
+  return (
+    <button
+      onClick={toggleTheme}
+      className="p-2 rounded-xl bg-slate-200 dark:bg-gray-800 hover:bg-slate-300 dark:hover:bg-gray-700 text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+      title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+    </button>
+  )
+}
+
 function AppShell() {
   const [view, setView] = useState('home')
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -31,8 +45,8 @@ function AppShell() {
 
   if (!hydrated) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-950">
-        <div className="flex flex-col items-center gap-3 text-gray-500">
+      <div className="flex items-center justify-center h-screen bg-slate-50 dark:bg-gray-950">
+        <div className="flex flex-col items-center gap-3 text-slate-400 dark:text-gray-500">
           <Compass size={32} className="animate-pulse text-blue-500" />
           <p className="text-sm">Loading your dashboard…</p>
         </div>
@@ -49,15 +63,15 @@ function AppShell() {
         onClick={() => { setView(item.id); setSidebarOpen(false) }}
         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
           isActive
-            ? 'bg-blue-600/20 text-blue-400 border border-blue-600/30'
-            : 'text-gray-400 hover:text-white hover:bg-gray-800'
+            ? 'bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-600/30'
+            : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-gray-800'
         }`}
       >
-        <Icon size={17} className={isActive ? 'text-blue-400' : ''} />
+        <Icon size={17} className={isActive ? 'text-blue-600 dark:text-blue-400' : ''} />
         <span className="flex-1 text-left">{item.label}</span>
         {badge > 0 && (
           <span className={`text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center ${
-            isActive ? 'bg-blue-600/30 text-blue-300' : 'bg-gray-700 text-gray-300'
+            isActive ? 'bg-blue-600/30 text-blue-600 dark:text-blue-300' : 'bg-slate-200 dark:bg-gray-700 text-slate-600 dark:text-gray-300'
           }`}>
             {badge}
           </span>
@@ -76,19 +90,22 @@ function AppShell() {
   }[view]
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-950">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 bg-gray-950 border-r border-gray-900">
+      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 bg-white dark:bg-gray-950 border-r border-slate-200 dark:border-gray-900">
         {/* Logo */}
-        <div className="p-5 border-b border-gray-900">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center">
-              <Compass size={16} className="text-white" />
+        <div className="p-5 border-b border-slate-200 dark:border-gray-900">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center">
+                <Compass size={16} className="text-white" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-slate-900 dark:text-white">Life Companion</div>
+                <div className="text-xs text-slate-400 dark:text-gray-500">Your dashboard</div>
+              </div>
             </div>
-            <div>
-              <div className="text-sm font-bold text-white">Life Companion</div>
-              <div className="text-xs text-gray-500">Your dashboard</div>
-            </div>
+            <ThemeToggle />
           </div>
         </div>
 
@@ -99,32 +116,32 @@ function AppShell() {
               <NavItem key={item.id} item={item} />
             ))}
           </div>
-          <div className="mt-4 pt-4 border-t border-gray-800">
-            <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-600">Automation</p>
+          <div className="mt-4 pt-4 border-t border-slate-200 dark:border-gray-800">
+            <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-gray-600">Automation</p>
             <NavItem item={NAV_ITEMS.find(i => i.id === 'agents')} />
           </div>
-          <div className="mt-4 pt-4 border-t border-gray-800">
-            <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-600">Quick Access</p>
+          <div className="mt-4 pt-4 border-t border-slate-200 dark:border-gray-800">
+            <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-gray-600">Quick Access</p>
             <a
               href="https://onedrive.live.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 transition-all"
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-gray-800 transition-all"
             >
               <Cloud size={17} />
               <span className="flex-1 text-left">OneDrive</span>
-              <ExternalLink size={12} className="text-gray-600" />
+              <ExternalLink size={12} className="text-slate-400 dark:text-gray-600" />
             </a>
           </div>
-          <div className="mt-4 pt-4 border-t border-gray-800 space-y-1">
+          <div className="mt-4 pt-4 border-t border-slate-200 dark:border-gray-800 space-y-1">
             <NavItem item={NAV_ITEMS.find(i => i.id === 'settings')} />
           </div>
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-900">
-          <p className="text-xs text-gray-600 text-center">
-            Data saved locally · <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition-colors">Enable sync →</a>
+        <div className="p-4 border-t border-slate-200 dark:border-gray-900">
+          <p className="text-xs text-slate-400 dark:text-gray-600 text-center">
+            Synced via Supabase
           </p>
         </div>
       </aside>
@@ -132,23 +149,26 @@ function AppShell() {
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/40 dark:bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-gray-900 border-r border-gray-800 flex flex-col transform transition-transform duration-200 lg:hidden ${
+      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-gray-900 border-r border-slate-200 dark:border-gray-800 flex flex-col transform transition-transform duration-200 lg:hidden ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="flex items-center justify-between p-5 border-b border-gray-800">
+        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-gray-800">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center">
               <Compass size={16} className="text-white" />
             </div>
-            <span className="font-bold text-white">Life Companion</span>
+            <span className="font-bold text-slate-900 dark:text-white">Life Companion</span>
           </div>
-          <button onClick={() => setSidebarOpen(false)} className="p-1.5 rounded-lg hover:bg-gray-800 text-gray-400">
-            <X size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button onClick={() => setSidebarOpen(false)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-400 dark:text-gray-400">
+              <X size={18} />
+            </button>
+          </div>
         </div>
         <nav className="flex-1 p-3 space-y-1">
           {NAV_ITEMS.map(item => <NavItem key={item.id} item={item} />)}
@@ -158,15 +178,15 @@ function AppShell() {
       {/* Main */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile top bar */}
-        <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-gray-900 flex-shrink-0">
-          <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg hover:bg-gray-800 text-gray-400">
+        <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-gray-900 bg-white dark:bg-transparent flex-shrink-0">
+          <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-500 dark:text-gray-400">
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-2">
-            <Compass size={16} className="text-blue-400" />
-            <span className="font-semibold text-sm text-white">Life Companion</span>
+            <Compass size={16} className="text-blue-500" />
+            <span className="font-semibold text-sm text-slate-900 dark:text-white">Life Companion</span>
           </div>
-          <div className="w-8" /> {/* spacer */}
+          <ThemeToggle />
         </div>
 
         {/* Content */}
@@ -175,7 +195,7 @@ function AppShell() {
         </div>
 
         {/* Mobile bottom nav */}
-        <nav className="lg:hidden flex border-t border-gray-900 bg-gray-950 flex-shrink-0 safe-bottom">
+        <nav className="lg:hidden flex border-t border-slate-200 dark:border-gray-900 bg-white dark:bg-gray-950 flex-shrink-0 safe-bottom">
           {NAV_ITEMS.map(item => {
             const Icon = item.icon
             const isActive = view === item.id
@@ -185,7 +205,7 @@ function AppShell() {
                 key={item.id}
                 onClick={() => setView(item.id)}
                 className={`flex-1 flex flex-col items-center gap-1 py-2.5 transition-colors relative ${
-                  isActive ? 'text-blue-400' : 'text-gray-500 hover:text-gray-300'
+                  isActive ? 'text-blue-500' : 'text-slate-400 dark:text-gray-500 hover:text-slate-600 dark:hover:text-gray-300'
                 }`}
               >
                 <Icon size={20} />
@@ -206,8 +226,10 @@ function AppShell() {
 
 export default function Dashboard() {
   return (
-    <DataProvider>
-      <AppShell />
-    </DataProvider>
+    <ThemeProvider>
+      <DataProvider>
+        <AppShell />
+      </DataProvider>
+    </ThemeProvider>
   )
 }

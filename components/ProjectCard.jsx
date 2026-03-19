@@ -41,7 +41,7 @@ export default function ProjectCard({ project, onEdit }) {
 
   return (
     <div
-      className="bg-gray-900 border rounded-2xl overflow-hidden transition-all hover:border-opacity-80"
+      className="bg-white dark:bg-gray-900 border rounded-2xl overflow-hidden transition-all hover:border-opacity-80"
       style={{ borderColor: project.color + '40' }}
     >
       {/* Color bar */}
@@ -61,15 +61,15 @@ export default function ProjectCard({ project, onEdit }) {
           {/* Title + meta */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-semibold text-white truncate">{project.name}</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-white truncate">{project.name}</h3>
               <StatusIcon size={13} className={`flex-shrink-0 ${statusInfo.color}`} />
             </div>
             {project.description && (
-              <p className="text-xs text-gray-400 mt-0.5 truncate">{project.description}</p>
+              <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5 truncate">{project.description}</p>
             )}
             {/* Badges row */}
             <div className="flex items-center gap-2 mt-2 flex-wrap">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-slate-400 dark:text-gray-500">
                 {project.links.length} link{project.links.length !== 1 ? 's' : ''}
               </span>
               {projectTasks.length > 0 && (
@@ -84,13 +84,13 @@ export default function ProjectCard({ project, onEdit }) {
           <div className="flex items-center gap-1 flex-shrink-0">
             <button
               onClick={() => onEdit(project)}
-              className="p-1.5 rounded-lg hover:bg-gray-800 text-gray-500 hover:text-white transition-colors"
+              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-400 dark:text-gray-500 hover:text-slate-900 dark:hover:text-white transition-colors"
             >
               <Pencil size={14} />
             </button>
             <button
               onClick={handleDelete}
-              className="p-1.5 rounded-lg hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-colors"
+              className="p-1.5 rounded-lg hover:bg-red-500/20 text-slate-400 dark:text-gray-500 hover:text-red-400 transition-colors"
             >
               <Trash2 size={14} />
             </button>
@@ -101,7 +101,7 @@ export default function ProjectCard({ project, onEdit }) {
         {project.links.length > 0 && (
           <button
             onClick={() => setExpanded(v => !v)}
-            className="mt-4 w-full flex items-center justify-between py-2 px-3 rounded-xl bg-gray-800 hover:bg-gray-750 text-gray-400 hover:text-white text-xs font-medium transition-colors group"
+            className="mt-4 w-full flex items-center justify-between py-2 px-3 rounded-xl bg-slate-100 dark:bg-gray-800 hover:bg-slate-100 dark:hover:bg-gray-750 text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white text-xs font-medium transition-colors group"
           >
             <span>Resources & Links</span>
             {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -121,7 +121,7 @@ export default function ProjectCard({ project, onEdit }) {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-750 group border border-transparent hover:border-gray-700 transition-all"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-gray-800 hover:bg-slate-100 dark:hover:bg-gray-750 group border border-transparent hover:border-slate-300 dark:hover:border-gray-700 transition-all"
               >
                 <div
                   className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -130,14 +130,14 @@ export default function ProjectCard({ project, onEdit }) {
                   <Icon size={15} style={{ color: project.color }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm text-white font-medium truncate group-hover:text-blue-300 transition-colors">
+                  <div className="text-sm text-slate-900 dark:text-white font-medium truncate group-hover:text-blue-300 transition-colors">
                     {link.label || typeInfo.label}
                   </div>
                   {link.note && (
-                    <div className="text-xs text-gray-500 truncate">{link.note}</div>
+                    <div className="text-xs text-slate-400 dark:text-gray-500 truncate">{link.note}</div>
                   )}
                 </div>
-                <ExternalLink size={13} className="flex-shrink-0 text-gray-600 group-hover:text-gray-400 transition-colors" />
+                <ExternalLink size={13} className="flex-shrink-0 text-slate-400 dark:text-gray-600 group-hover:text-slate-500 dark:group-hover:text-gray-400 transition-colors" />
               </a>
             )
           })}
@@ -147,8 +147,8 @@ export default function ProjectCard({ project, onEdit }) {
       {/* Notes */}
       {expanded && project.notes && (
         <div className="px-5 pb-5">
-          <div className="px-3 py-2.5 rounded-xl bg-gray-800/50 border border-gray-800">
-            <p className="text-xs text-gray-400 leading-relaxed">{project.notes}</p>
+          <div className="px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-gray-800/50 border border-slate-200 dark:border-gray-800">
+            <p className="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">{project.notes}</p>
           </div>
         </div>
       )}

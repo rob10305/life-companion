@@ -15,8 +15,8 @@ export default function TaskItem({ task, onEdit }) {
   return (
     <div className={`group flex items-start gap-3 px-4 py-3 rounded-xl border transition-all ${
       task.completed
-        ? 'border-transparent bg-gray-900/40 opacity-50'
-        : 'border-gray-800 bg-gray-900 hover:border-gray-700'
+        ? 'border-transparent bg-slate-100/60 dark:bg-gray-900/40 opacity-50'
+        : 'border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-slate-300 dark:hover:border-gray-700'
     }`}>
       {/* Checkbox */}
       <button
@@ -24,7 +24,7 @@ export default function TaskItem({ task, onEdit }) {
         className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
           task.completed
             ? 'bg-green-500 border-green-500'
-            : 'border-gray-600 hover:border-gray-400'
+            : 'border-slate-300 dark:border-gray-600 hover:border-slate-400 dark:hover:border-gray-400'
         }`}
       >
         {task.completed && (
@@ -37,7 +37,7 @@ export default function TaskItem({ task, onEdit }) {
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-start gap-2 flex-wrap">
-          <span className={`text-sm leading-5 ${task.completed ? 'line-through text-gray-500' : 'text-white'}`}>
+          <span className={`text-sm leading-5 ${task.completed ? 'line-through text-slate-400 dark:text-gray-500' : 'text-slate-900 dark:text-white'}`}>
             {task.title}
           </span>
           {/* Priority dot for high */}
@@ -67,7 +67,7 @@ export default function TaskItem({ task, onEdit }) {
             </span>
           )}
           {dateLabel && (
-            <span className={`flex items-center gap-1 text-xs ${overdue ? 'text-red-400' : 'text-gray-500'}`}>
+            <span className={`flex items-center gap-1 text-xs ${overdue ? 'text-red-400' : 'text-slate-400 dark:text-gray-500'}`}>
               <Calendar size={10} />
               {dateLabel}
             </span>
@@ -79,13 +79,13 @@ export default function TaskItem({ task, onEdit }) {
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-0.5">
         <button
           onClick={() => onEdit(task)}
-          className="p-1.5 rounded-lg hover:bg-gray-700 text-gray-500 hover:text-white transition-colors"
+          className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-400 dark:text-gray-500 hover:text-slate-900 dark:hover:text-white transition-colors"
         >
           <Pencil size={13} />
         </button>
         <button
           onClick={() => deleteTask(task.id)}
-          className="p-1.5 rounded-lg hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-colors"
+          className="p-1.5 rounded-lg hover:bg-red-500/20 text-slate-400 dark:text-gray-500 hover:text-red-400 transition-colors"
         >
           <Trash2 size={13} />
         </button>
