@@ -14,7 +14,7 @@ export async function GET(request) {
   }
 
   try {
-    // Paginate through all repos to catch newly created ones
+    // Fetch from /user/repos (authenticated user's repos)
     let allRepos = []
     let page = 1
     while (true) {
@@ -41,6 +41,42 @@ export async function GET(request) {
       allRepos = allRepos.concat(repos)
       if (repos.length < 100) break
       page++
+    }
+
+    // Also get the authenticated username and fetch via /users/:user/repos
+    // as a fallback — some token scopes miss repos from /user/repos
+    try {
+      const userRes = await fetch(`${GITHUB_API}/user`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+        cache: 'no-store',
+      })
+      if (userRes.ok) {
+        const user = await userRes.json()
+        const knownIds = new Set(allRepos.map(r => r.id))
+        let fallbackPage = 1
+        while (true) {
+          const fbRes = await fetch(
+            `${GITHUB_API}/users/${user.login}/repos?per_page=100&sort=updated&page=${fallbackPage}`,
+            {
+              headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+              cache: 'no-store',
+            }
+          )
+          if (!fbRes.ok) break
+          const fbRepos = await fbRes.json()
+          if (fbRepos.length === 0) break
+          for (const r of fbRepos) {
+            if (!knownIds.has(r.id)) {
+              allRepos.push(r)
+              knownIds.add(r.id)
+            }
+          }
+          if (fbRepos.length < 100) break
+          fallbackPage++
+        }
+      }
+    } catch {
+      // Fallback failed, continue with what we have
     }
 
     const simplified = allRepos.map(r => ({
