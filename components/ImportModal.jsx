@@ -20,21 +20,29 @@ function timeAgo(dateStr) {
 }
 
 export default function ImportModal({ onClose }) {
-  const { addProject } = useData()
+  const { addProject, projects } = useData()
 
-  // State machine: 'loading-repos' | 'select' | 'loading-details' | 'preview' | 'error'
+  // State machine: 'loading-repos' | 'select' | 'loading-details' | 'preview' | 'syncing' | 'error'
   const [phase, setPhase] = useState('loading-repos')
   const [repos, setRepos] = useState([])
   const [search, setSearch] = useState('')
   const [error, setError] = useState('')
   const [selectedRepo, setSelectedRepo] = useState(null)
+  const [syncProgress, setSyncProgress] = useState({ current: 0, total: 0 })
 
   // Preview form state (populated after detection)
   const [form, setForm] = useState(null)
   const [techStack, setTechStack] = useState([])
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
-  // Fetch repos on mount
+  // Check if a repo is already imported by matching its GitHub URL against project links
+  function isRepoImported(repo) {
+    return projects.some(p =>
+      p.links?.some(l => l.type === 'git' && l.url === repo.html_url)
+    )
+  }
+
+  // Always fetch fresh repos on mount so new repos appear
   useEffect(() => {
     fetchRepos()
   }, [])
@@ -43,7 +51,8 @@ export default function ImportModal({ onClose }) {
     setPhase('loading-repos')
     setError('')
     try {
-      const res = await fetch('/api/github/repos')
+      // Always cache-bust to pick up newly created repos
+      const res = await fetch('/api/github/repos?t=' + Date.now())
       const data = await res.json()
       if (!res.ok) {
         setError(data.error || 'Failed to load repos')
@@ -56,6 +65,35 @@ export default function ImportModal({ onClose }) {
       setError('Network error. Check your connection.')
       setPhase('error')
     }
+  }
+
+  async function handleSyncAll() {
+    const newRepos = repos.filter(r => !isRepoImported(r))
+    if (newRepos.length === 0) return
+    setPhase('syncing')
+    setSyncProgress({ current: 0, total: newRepos.length })
+    for (let i = 0; i < newRepos.length; i++) {
+      setSyncProgress({ current: i + 1, total: newRepos.length })
+      try {
+        const res = await fetch(`/api/github/repo-details?repo=${encodeURIComponent(newRepos[i].full_name)}`)
+        const data = await res.json()
+        if (res.ok) {
+          const detected = detectProjectDetails(data.repo, data.packageJson)
+          addProject({
+            name: detected.name,
+            description: detected.description,
+            emoji: detected.suggestedEmoji,
+            color: detected.suggestedColor,
+            status: 'active',
+            notes: detected.notes,
+            links: detected.links,
+          })
+        }
+      } catch {
+        // Skip failed repos silently, continue with the rest
+      }
+    }
+    onClose()
   }
 
   async function handleSelectRepo(repo) {
@@ -160,7 +198,7 @@ export default function ImportModal({ onClose }) {
               <AlertTriangle size={24} className="mx-auto text-red-400 mb-2" />
               <p className="text-sm text-red-300 mb-3">{error}</p>
               <button
-                onClick={selectedRepo ? () => handleSelectRepo(selectedRepo) : fetchRepos}
+                onClick={selectedRepo ? () => handleSelectRepo(selectedRepo) : () => fetchRepos()}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 text-notion-text dark:text-white rounded-xl text-sm transition-colors"
               >
                 <RefreshCw size={14} /> Try again
@@ -172,18 +210,55 @@ export default function ImportModal({ onClose }) {
         {/* Repo selection */}
         {phase === 'select' && (
           <div className="p-5">
-            {/* Search */}
-            <div className="relative mb-3">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-notion-muted dark:text-gray-500" />
-              <input
-                autoFocus
-                type="text"
-                placeholder="Search repositories..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
-              />
+            {/* Search + actions row */}
+            <div className="flex gap-2 mb-3">
+              <div className="relative flex-1">
+                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-notion-muted dark:text-gray-500" />
+                <input
+                  autoFocus
+                  type="text"
+                  placeholder="Search repositories..."
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  className="w-full bg-cream-200 dark:bg-gray-800 border border-cream-400 dark:border-gray-700 rounded-xl pl-10 pr-4 py-2.5 text-notion-text dark:text-white placeholder-notion-muted dark:placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              <button
+                onClick={() => fetchRepos()}
+                title="Refresh repo list"
+                className="p-2.5 rounded-xl border border-cream-400 dark:border-gray-700 hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white transition-colors"
+              >
+                <RefreshCw size={15} />
+              </button>
             </div>
+
+            {/* New repos summary + bulk import */}
+            {(() => {
+              const newCount = repos.filter(r => !isRepoImported(r)).length
+              if (newCount > 0 && repos.length > 0) {
+                return (
+                  <div className="flex items-center justify-between mb-3 px-1">
+                    <span className="text-xs text-notion-muted dark:text-gray-400">
+                      {newCount} new {newCount === 1 ? 'repo' : 'repos'} available
+                    </span>
+                    <button
+                      onClick={handleSyncAll}
+                      className="flex items-center gap-1.5 text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                      <Plus size={13} /> Import all new
+                    </button>
+                  </div>
+                )
+              }
+              if (repos.length > 0 && newCount === 0) {
+                return (
+                  <div className="flex items-center justify-center mb-3 px-1">
+                    <span className="text-xs text-green-400">All repos already imported</span>
+                  </div>
+                )
+              }
+              return null
+            })()}
 
             {/* Repo list */}
             <div className="max-h-80 overflow-y-auto space-y-1.5 -mx-1 px-1">
@@ -192,40 +267,73 @@ export default function ImportModal({ onClose }) {
                   {search ? 'No repos match your search' : 'No repositories found'}
                 </p>
               ) : (
-                filteredRepos.map(repo => (
-                  <button
-                    key={repo.full_name}
-                    onClick={() => handleSelectRepo(repo)}
-                    className="w-full flex items-center gap-3 px-3 py-3 rounded-xl border border-transparent hover:bg-cream-200 dark:hover:bg-gray-800 hover:border-cream-400 dark:hover:border-gray-700 text-left transition-all group"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-notion-text dark:text-white truncate group-hover:text-blue-300 transition-colors">
-                          {repo.name}
-                        </span>
-                        {repo.isPrivate ? (
-                          <Lock size={11} className="text-yellow-500 flex-shrink-0" />
-                        ) : (
-                          <Globe2 size={11} className="text-notion-muted dark:text-gray-500 flex-shrink-0" />
+                filteredRepos.map(repo => {
+                  const imported = isRepoImported(repo)
+                  return (
+                    <button
+                      key={repo.full_name}
+                      onClick={() => !imported && handleSelectRepo(repo)}
+                      disabled={imported}
+                      className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl border border-transparent text-left transition-all group ${
+                        imported
+                          ? 'opacity-50 cursor-default'
+                          : 'hover:bg-cream-200 dark:hover:bg-gray-800 hover:border-cream-400 dark:hover:border-gray-700'
+                      }`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-sm font-medium truncate transition-colors ${
+                            imported
+                              ? 'text-notion-muted dark:text-gray-500'
+                              : 'text-notion-text dark:text-white group-hover:text-blue-300'
+                          }`}>
+                            {repo.name}
+                          </span>
+                          {repo.isPrivate ? (
+                            <Lock size={11} className="text-yellow-500 flex-shrink-0" />
+                          ) : (
+                            <Globe2 size={11} className="text-notion-muted dark:text-gray-500 flex-shrink-0" />
+                          )}
+                          {imported && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-green-500/15 text-green-400 border border-green-500/20 font-medium flex-shrink-0">
+                              Imported
+                            </span>
+                          )}
+                        </div>
+                        {repo.description && (
+                          <p className="text-xs text-notion-muted dark:text-gray-500 truncate mt-0.5">{repo.description}</p>
                         )}
                       </div>
-                      {repo.description && (
-                        <p className="text-xs text-notion-muted dark:text-gray-500 truncate mt-0.5">{repo.description}</p>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      {repo.language && (
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-cream-200 dark:bg-gray-800 text-notion-muted dark:text-gray-400">
-                          {repo.language}
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {repo.language && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-cream-200 dark:bg-gray-800 text-notion-muted dark:text-gray-400">
+                            {repo.language}
+                          </span>
+                        )}
+                        <span className="text-xs text-notion-muted dark:text-gray-600">
+                          {timeAgo(repo.updated_at)}
                         </span>
-                      )}
-                      <span className="text-xs text-notion-muted dark:text-gray-600">
-                        {timeAgo(repo.updated_at)}
-                      </span>
-                    </div>
-                  </button>
-                ))
+                      </div>
+                    </button>
+                  )
+                })
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Syncing all new repos */}
+        {phase === 'syncing' && (
+          <div className="flex flex-col items-center justify-center py-16 text-notion-muted dark:text-gray-400">
+            <Loader2 size={28} className="animate-spin text-blue-400 mb-3" />
+            <p className="text-sm">
+              Importing repo {syncProgress.current} of {syncProgress.total}...
+            </p>
+            <div className="w-48 bg-cream-300 dark:bg-gray-800 rounded-full h-1.5 mt-3">
+              <div
+                className="bg-blue-400 h-1.5 rounded-full transition-all duration-300"
+                style={{ width: `${(syncProgress.current / syncProgress.total) * 100}%` }}
+              />
             </div>
           </div>
         )}

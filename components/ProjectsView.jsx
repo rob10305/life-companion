@@ -1,18 +1,89 @@
 'use client'
-import { useState } from 'react'
-import { Plus, Search, FolderKanban, GitBranch } from 'lucide-react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { Plus, Search, FolderKanban, GitBranch, RefreshCw, Loader2 } from 'lucide-react'
 import { useData } from '../lib/DataContext'
+import { detectProjectDetails } from '../lib/githubDetection'
 import ProjectCard from './ProjectCard'
 import ProjectModal from './ProjectModal'
 import ImportModal from './ImportModal'
 
 export default function ProjectsView() {
-  const { projects } = useData()
+  const { projects, addProject, hydrated } = useData()
   const [showModal, setShowModal] = useState(false)
   const [showImport, setShowImport] = useState(false)
   const [editingProject, setEditingProject] = useState(null)
   const [search, setSearch] = useState('')
   const [filterStatus, setFilterStatus] = useState('active')
+  const [syncing, setSyncing] = useState(false)
+  const [syncResult, setSyncResult] = useState(null)
+  const hasSynced = useRef(false)
+
+  // Use a ref to always have the latest projects in async callbacks
+  const projectsRef = useRef(projects)
+  useEffect(() => { projectsRef.current = projects }, [projects])
+
+  // Auto-sync once data has hydrated from Supabase/localStorage
+  useEffect(() => {
+    if (hydrated && !hasSynced.current) {
+      hasSynced.current = true
+      handleSync(true)
+    }
+  }, [hydrated])
+
+  const handleSync = useCallback(async function handleSync(silent = false) {
+    setSyncing(true)
+    if (!silent) setSyncResult(null)
+    try {
+      // Cache-bust to ensure we always get fresh data from GitHub
+      const res = await fetch('/api/github/repos?t=' + Date.now())
+      const repos = await res.json()
+      if (!res.ok) {
+        if (!silent) setSyncResult({ error: repos.error || 'Failed to fetch repos' })
+        setSyncing(false)
+        return
+      }
+      // Find repos not yet imported — use ref for latest projects
+      const currentProjects = projectsRef.current
+      const existingUrls = new Set(
+        currentProjects.flatMap(p => (p.links || []).filter(l => l.type === 'git').map(l => l.url))
+      )
+      const newRepos = repos.filter(r => !existingUrls.has(r.html_url))
+      if (newRepos.length === 0) {
+        if (!silent) setSyncResult({ added: 0 })
+        setSyncing(false)
+        return
+      }
+      // Auto-import each new repo
+      let added = 0
+      for (const repo of newRepos) {
+        try {
+          const detailRes = await fetch(`/api/github/repo-details?repo=${encodeURIComponent(repo.full_name)}`)
+          const data = await detailRes.json()
+          if (detailRes.ok) {
+            const detected = detectProjectDetails(data.repo, data.packageJson)
+            addProject({
+              name: detected.name,
+              description: detected.description,
+              emoji: detected.suggestedEmoji,
+              color: detected.suggestedColor,
+              status: 'active',
+              notes: detected.notes,
+              links: detected.links,
+            })
+            added++
+          }
+        } catch {
+          // Skip failed repos
+        }
+      }
+      setSyncResult({ added })
+    } catch {
+      if (!silent) setSyncResult({ error: 'Network error' })
+    }
+    setSyncing(false)
+    // Clear sync result after 4 seconds
+    setTimeout(() => setSyncResult(null), 4000)
+  }, [addProject])
 
   const filtered = projects.filter(p => {
     if (filterStatus !== 'all' && p.status !== filterStatus) return false
@@ -43,6 +114,15 @@ export default function ProjectsView() {
           </div>
           <div className="flex gap-2">
             <button
+              onClick={() => handleSync(false)}
+              disabled={syncing}
+              title="Sync new repos from GitHub"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 border border-cream-400 dark:border-gray-700 text-notion-text dark:text-white rounded-xl font-medium text-xs sm:text-sm transition-colors disabled:opacity-50"
+            >
+              {syncing ? <Loader2 size={15} className="animate-spin" /> : <RefreshCw size={15} />}
+              <span className="hidden sm:inline">Sync</span>
+            </button>
+            <button
               onClick={() => setShowImport(true)}
               className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-cream-200 dark:bg-gray-800 hover:bg-cream-300 dark:hover:bg-gray-700 border border-cream-400 dark:border-gray-700 text-notion-text dark:text-white rounded-xl font-medium text-xs sm:text-sm transition-colors"
             >
@@ -58,6 +138,23 @@ export default function ProjectsView() {
             </button>
           </div>
         </div>
+
+        {/* Sync result feedback */}
+        {syncResult && (
+          <div className={`mb-3 px-3 py-2 rounded-xl text-xs font-medium ${
+            syncResult.error
+              ? 'bg-red-500/10 border border-red-500/30 text-red-400'
+              : syncResult.added === 0
+                ? 'bg-green-500/10 border border-green-500/30 text-green-400'
+                : 'bg-blue-500/10 border border-blue-500/30 text-blue-400'
+          }`}>
+            {syncResult.error
+              ? syncResult.error
+              : syncResult.added === 0
+                ? 'All GitHub repos are already imported!'
+                : `Imported ${syncResult.added} new ${syncResult.added === 1 ? 'project' : 'projects'} from GitHub`}
+          </div>
+        )}
 
         {/* Search + filter */}
         <div className="flex gap-3">
