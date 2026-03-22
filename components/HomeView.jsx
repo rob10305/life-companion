@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import {
   Plus, ChevronRight, AlertCircle, Calendar, CheckCircle2,
-  FolderKanban, CheckSquare, Bookmark, Bot, Settings, Wrench
+  FolderKanban, CheckSquare, Bookmark, Bot, Settings, Wrench, Youtube
 } from 'lucide-react'
 import { useData } from '../lib/DataContext'
 import TaskItem from './TaskItem'
@@ -52,12 +52,13 @@ export default function HomeView({ onNavigate }) {
         </div>
 
         {/* Navigation grid */}
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5 sm:gap-3">
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 sm:gap-3">
           {[
             { id: 'projects', label: 'Projects', icon: FolderKanban, color: '#3B82F6', count: activeProjects.length },
             { id: 'tasks',    label: 'Tasks',    icon: CheckSquare,  color: '#10B981', count: pendingTasks.length },
             { id: 'links',    label: 'Links',    icon: Bookmark,     color: '#F59E0B', count: null },
             { id: 'agents',   label: 'Agents',   icon: Bot,          color: '#8B5CF6', count: null },
+            { id: 'youtube',  label: 'YouTube',  icon: Youtube,      color: '#EF4444', count: null },
             { id: 'settings', label: 'Settings', icon: Settings,     color: '#6B7280', count: null },
             { id: 'tools',    label: 'AI Tools',  icon: Wrench,       color: '#EC4899', count: null },
           ].map(item => {

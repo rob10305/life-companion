@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import {
   LayoutDashboard, FolderKanban, CheckSquare, Settings,
-  Menu, X, Compass, Bot, Bookmark, Cloud, ExternalLink, Sun, Moon
+  Menu, X, Compass, Bot, Bookmark, Cloud, ExternalLink, Sun, Moon, Youtube
 } from 'lucide-react'
 import { DataProvider, useData } from '../lib/DataContext'
 import { ThemeProvider, useTheme } from '../lib/ThemeContext'
@@ -12,12 +12,14 @@ import TasksView from './TasksView'
 import LinksView from './LinksView'
 import AgentsView from './AgentsView'
 import SettingsView from './SettingsView'
+import YouTubeView from './YouTubeView'
 
 const NAV_ITEMS = [
   { id: 'home',     label: 'Home',     icon: LayoutDashboard },
   { id: 'projects', label: 'Projects', icon: FolderKanban },
   { id: 'tasks',    label: 'Tasks',    icon: CheckSquare },
   { id: 'links',    label: 'Links',    icon: Bookmark },
+  { id: 'youtube',  label: 'YouTube',  icon: Youtube },
   { id: 'agents',   label: 'Agents',   icon: Bot },
   { id: 'settings', label: 'Settings', icon: Settings },
 ]
@@ -85,6 +87,7 @@ function AppShell() {
     projects: <ProjectsView />,
     tasks:    <TasksView />,
     links:    <LinksView />,
+    youtube:  <YouTubeView />,
     agents:   <AgentsView />,
     settings: <SettingsView />,
   }[view]
@@ -112,9 +115,13 @@ function AppShell() {
         {/* Nav */}
         <nav className="flex-1 p-3 overflow-y-auto">
           <div className="space-y-1">
-            {NAV_ITEMS.filter(i => !['agents', 'settings'].includes(i.id)).map(item => (
+            {NAV_ITEMS.filter(i => !['agents', 'settings', 'youtube'].includes(i.id)).map(item => (
               <NavItem key={item.id} item={item} />
             ))}
+          </div>
+          <div className="mt-4 pt-4 border-t border-cream-300 dark:border-gray-800">
+            <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-notion-muted dark:text-gray-600">Apps</p>
+            <NavItem item={NAV_ITEMS.find(i => i.id === 'youtube')} />
           </div>
           <div className="mt-4 pt-4 border-t border-cream-300 dark:border-gray-800">
             <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-notion-muted dark:text-gray-600">Automation</p>
@@ -196,7 +203,7 @@ function AppShell() {
 
         {/* Mobile bottom nav */}
         <nav className="lg:hidden flex border-t border-cream-300 dark:border-gray-900 bg-white dark:bg-gray-950 flex-shrink-0 safe-bottom">
-          {NAV_ITEMS.filter(i => i.id !== 'settings').map(item => {
+          {NAV_ITEMS.filter(i => !['settings', 'youtube'].includes(i.id)).map(item => {
             const Icon = item.icon
             const isActive = view === item.id
             const badge = item.id === 'tasks' ? pendingCount : 0
