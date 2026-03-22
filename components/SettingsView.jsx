@@ -1,7 +1,73 @@
 'use client'
 import { useState, useRef } from 'react'
-import { Download, Upload, RefreshCw, Info, ExternalLink } from 'lucide-react'
+import { Download, Upload, RefreshCw, Info, ExternalLink, Puzzle, ChevronDown, ChevronUp } from 'lucide-react'
 import { useData } from '../lib/DataContext'
+
+function ExtensionCard() {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-2xl overflow-hidden">
+      <div className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+        <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0">
+          <Puzzle size={20} className="text-white" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-sm font-semibold text-notion-text dark:text-white">Chrome Extension</h3>
+          <p className="text-xs text-notion-muted dark:text-gray-400 mt-0.5">Auto-import bookmarks from any machine</p>
+        </div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <a
+            href="/downloads/life-companion-extension.zip"
+            download
+            className="flex items-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-medium transition-colors"
+          >
+            <Download size={13} /> Download
+          </a>
+          <button
+            onClick={() => setExpanded(v => !v)}
+            className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-gray-800 text-notion-muted dark:text-gray-400 hover:text-notion-text dark:hover:text-white transition-colors"
+          >
+            {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+        </div>
+      </div>
+
+      {expanded && (
+        <div className="px-4 pb-4 pt-0">
+          <div className="bg-cream-200 dark:bg-gray-900/60 rounded-xl p-4 space-y-3">
+            <h4 className="text-xs font-semibold text-notion-text/80 dark:text-gray-300">Install Instructions</h4>
+            <ol className="space-y-2 text-xs text-notion-muted dark:text-gray-400 leading-relaxed">
+              <li className="flex gap-2">
+                <span className="text-blue-400 font-bold flex-shrink-0">1.</span>
+                <span>Download the zip above and <strong className="text-notion-text/80 dark:text-gray-300">extract</strong> it to a folder</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-blue-400 font-bold flex-shrink-0">2.</span>
+                <span>Go to <code className="bg-cream-300 dark:bg-gray-800 px-1.5 py-0.5 rounded text-blue-300">chrome://extensions</code> in Chrome</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-blue-400 font-bold flex-shrink-0">3.</span>
+                <span>Toggle <strong className="text-notion-text/80 dark:text-gray-300">Developer mode</strong> ON (top right)</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-blue-400 font-bold flex-shrink-0">4.</span>
+                <span>Click <strong className="text-notion-text/80 dark:text-gray-300">Load unpacked</strong> → select the extracted folder</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-blue-400 font-bold flex-shrink-0">5.</span>
+                <span>Click the <strong className="text-notion-text/80 dark:text-gray-300">LC</strong> icon in toolbar → enter your Supabase URL and key → Import!</span>
+              </li>
+            </ol>
+            <p className="text-xs text-notion-muted dark:text-gray-500 pt-1 border-t border-cream-300 dark:border-gray-800">
+              Works on any PC with Chrome. Install once per machine — bookmarks sync to your dashboard automatically.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function SettingsView() {
   const { exportData, importData, resetToDefaults } = useData()
@@ -99,6 +165,9 @@ export default function SettingsView() {
             <RefreshCw size={15} /> Reset All Data
           </button>
         </div>
+
+        {/* Chrome Extension */}
+        <ExtensionCard />
 
         {/* About */}
         <div className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-2xl p-5">

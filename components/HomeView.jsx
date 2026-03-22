@@ -2,20 +2,17 @@
 import { useState } from 'react'
 import {
   Plus, ChevronRight, AlertCircle, Calendar, CheckCircle2,
-  FolderKanban, CheckSquare, Bookmark, Bot, Settings, Wrench, Youtube
+  FolderKanban, CheckSquare, Bookmark, Bot, Settings, Wrench, Youtube, ExternalLink
 } from 'lucide-react'
 import { useData } from '../lib/DataContext'
 import TaskItem from './TaskItem'
 import TaskModal from './TaskModal'
-import ProjectCard from './ProjectCard'
-import ProjectModal from './ProjectModal'
 import { isOverdue, formatDate } from '../lib/utils'
 
 export default function HomeView({ onNavigate }) {
   const { tasks, projects, categories, toggleTask } = useData()
   const [showTaskModal, setShowTaskModal] = useState(false)
   const [editingTask, setEditingTask] = useState(null)
-  const [editingProject, setEditingProject] = useState(null)
   const [quickTitle, setQuickTitle] = useState('')
 
   const pendingTasks = tasks.filter(t => !t.completed)
@@ -132,29 +129,50 @@ export default function HomeView({ onNavigate }) {
           </div>
         )}
 
-        {/* Active projects */}
-        {activeProjects.length > 0 && (
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold text-notion-muted dark:text-gray-300">Active Projects</h2>
-              <button
-                onClick={() => onNavigate('projects')}
-                className="text-xs text-notion-muted dark:text-gray-500 hover:text-notion-muted dark:hover:text-gray-300 flex items-center gap-0.5"
+        {/* Quick links */}
+        <div>
+          <h2 className="text-sm font-semibold text-notion-muted dark:text-gray-300 mb-3">Quick Links</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              {
+                label: 'MrMikes Preview',
+                description: 'Website preview on Netlify',
+                url: 'https://mrmikespreview.netlify.app/',
+                color: '#F59E0B',
+                emoji: '🍔',
+              },
+              {
+                label: 'Red Maple Movement',
+                description: 'Community website',
+                url: 'https://www.redmaplemovement.ca/',
+                color: '#EF4444',
+                emoji: '🍁',
+              },
+            ].map(link => (
+              <a
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white dark:bg-gray-900 border border-cream-300 dark:border-gray-800 rounded-2xl p-4 flex items-center gap-4 hover:border-cream-400 dark:hover:border-gray-700 hover:shadow-sm transition-all group"
               >
-                View all <ChevronRight size={12} />
-              </button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {activeProjects.slice(0, 4).map(project => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  onEdit={p => { setEditingProject(p) }}
-                />
-              ))}
-            </div>
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 transition-transform group-hover:scale-105"
+                  style={{ background: link.color + '15' }}
+                >
+                  {link.emoji}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-notion-text dark:text-white truncate">{link.label}</span>
+                    <ExternalLink size={12} className="text-notion-muted dark:text-gray-600 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <p className="text-xs text-notion-muted dark:text-gray-500 mt-0.5">{link.description}</p>
+                </div>
+              </a>
+            ))}
           </div>
-        )}
+        </div>
 
         {/* Upcoming tasks */}
         {recentTasks.length > 0 && (
@@ -177,7 +195,7 @@ export default function HomeView({ onNavigate }) {
         )}
 
         {/* Empty state */}
-        {pendingTasks.length === 0 && activeProjects.length === 0 && (
+        {pendingTasks.length === 0 && (
           <div className="text-center py-12 text-notion-muted dark:text-gray-600">
             <CheckCircle2 size={48} className="mx-auto mb-4 opacity-30" />
             <p className="text-lg font-medium text-notion-muted dark:text-gray-500">You're all caught up!</p>
@@ -190,12 +208,6 @@ export default function HomeView({ onNavigate }) {
         <TaskModal
           task={editingTask?.id ? editingTask : null}
           onClose={() => { setShowTaskModal(false); setEditingTask(null) }}
-        />
-      )}
-      {editingProject && (
-        <ProjectModal
-          project={editingProject}
-          onClose={() => setEditingProject(null)}
         />
       )}
     </div>
